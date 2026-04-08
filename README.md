@@ -2,11 +2,7 @@
 
 > A modern, responsive portfolio website built with React + Vite, showcasing the professional experience, skills, and contact details of **Mahmoud Ahmed Saad**, Civil Engineer based in Istanbul, Turkey.
 
----
 
-## 🌐 Live Preview
-
-**[mahmoud-portfolio.vercel.app](https://mahmoud-portfolio.vercel.app)** *(update once deployed)*
 
 ---
 
