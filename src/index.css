@@ -1,0 +1,3 @@
+/* Global resets handled by App.jsx inline styles */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; }
