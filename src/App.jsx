@@ -148,7 +148,7 @@ function HeroVisual() {
           <circle cx="151" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
           <circle cx="249" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
         </svg>
-        <div className="char-wrap" onMouseEnter={nextMsg} onClick={nextMsg} style={{ cursor: "pointer" }}>
+        <div className="char-wrap" onClick={nextMsg} style={{ cursor: "pointer" }}>
           <div className="char-circle">
             <img src={charImg} alt="Welcome" className="hero-char" />
           </div>
