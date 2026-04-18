@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactDOM from "react-dom";
 import cvFile from "./assets/MAHMOUD_AHMED_CV_ATS.pdf";
+import charImg from "./assets/character.png";
 
 const CV_LINK = cvFile;
 const LINKEDIN_URL = "https://www.linkedin.com/in/eng-mahmoud-saad-635185249/";
@@ -129,6 +130,12 @@ function HeroVisual() {
           <circle cx="151" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
           <circle cx="249" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
         </svg>
+        <div className="char-wrap">
+          <div className="char-circle">
+            <img src={charImg} alt="Welcome" className="hero-char" />
+          </div>
+          <div className="welcome-bubble">Welcome!</div>
+        </div>
         <div className="float-tag ft-tl">AutoCAD</div>
         <div className="float-tag ft-tr">SAP2000</div>
         <div className="float-tag ft-bl">Site Supervision</div>
@@ -1021,6 +1028,34 @@ const css = (T) => `
   .hero-right { display: flex; align-items: center; justify-content: center; }
   .hero-visual { position: relative; width: 100%; max-width: 520px; }
   .bp-frame { position: relative; width: 100%; aspect-ratio: 1; }
+  
+  .char-wrap {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(120px, 15vw, 150px); height: clamp(20px, 15vw, 150px);
+    z-index: 10;
+  }
+  .char-circle {
+    width: 100%; height: 100%; border-radius: 50%;
+    border: 3px solid var(--accent); overflow: hidden;
+    background: var(--card); box-shadow: 0 0 40px var(--glow);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-char { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
+  
+  .welcome-bubble {
+    position: absolute; top: -15px; right: -45px;
+    background: var(--accent); color: var(--bg);
+    padding: 8px 16px; border-radius: 16px 16px 16px 0;
+    font-weight: 800; font-size: 14px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    animation: float-bubble 3s ease-in-out infinite;
+  }
+  @keyframes float-bubble {
+    0%, 100% { transform: translateY(0) rotate(5deg); }
+    50%      { transform: translateY(-8px) rotate(8deg); }
+  }
+
   .bp-svg {
     width: 100%; height: 100%; color: var(--accent);
     animation: bpSpin 90s linear infinite;
