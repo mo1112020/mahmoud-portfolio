@@ -1,41 +1,38 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactDOM from "react-dom";
-import cvFile from "./assets/MAHMOUD_AHMED_CV_ATS.pdf";
 import charImg from "./assets/character.png";
 
-const CV_LINK = cvFile;
 const LINKEDIN_URL = "https://www.linkedin.com/in/eng-mahmoud-saad-635185249/";
 const YOUTUBE_URL = "https://www.youtube.com/@mahmoudabdelhady6253";
 
 const T = {
-  bg:          "#09090b",
-  card:        "rgba(20,20,23,0.8)",
-  border:      "rgba(255,255,255,0.07)",
-  borderHover: "rgba(245,158,11,0.5)",
-  accent:      "#f59e0b",
-  accentGlow:  "rgba(245,158,11,0.22)",
-  accentSoft:  "rgba(245,158,11,0.08)",
-  white:       "#fafafa",
-  muted:       "#a1a1aa",
-  dim:         "#52525b",
-  green:       "#10b981",
-  surface:     "rgba(255,255,255,0.025)",
-  surfaceHov:  "rgba(255,255,255,0.045)",
+  bg: "#f5f4f0",
+  card: "#ffffff",
+  border: "rgba(0,0,0,0.06)",
+  borderHover: "rgba(0,0,0,0.12)",
+  accent: "#1c1917", // Stone 900
+  accentGlow: "rgba(28,25,23,0.05)",
+  accentSoft: "#e7e5e4", // Stone 200
+  white: "#1c1917", // Text is now dark
+  muted: "#78716c", // Stone 500
+  dim: "#a8a29e", // Stone 400
+  green: "#10b981",
+  surface: "#ffffff",
+  surfaceHov: "#fafaf9",
 };
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 const Icons = {
-  Mail:       () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>,
-  Phone:      () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
-  MapPin:     () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
-  Linkedin:   () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>,
-  ArrowRight: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
-  Check:      () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6 9 17l-5-5"/></svg>,
-  Download:   () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-  ChevronDown:() => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m6 9 6 6 6-6"/></svg>,
-  Menu:       () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
-  X:          () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6 6 18M6 6l12 12"/></svg>,
-  Youtube:    () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>,
+  Mail: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>,
+  Phone: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>,
+  MapPin: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>,
+  Linkedin: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg>,
+  ArrowRight: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>,
+  Check: () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6 9 17l-5-5" /></svg>,
+  ChevronDown: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m6 9 6 6 6-6" /></svg>,
+  Menu: () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>,
+  X: () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6 6 18M6 6l12 12" /></svg>,
+  Youtube: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z" /><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" /></svg>,
 };
 
 // ─── Shared Components ────────────────────────────────────────────────────────
@@ -86,17 +83,34 @@ function Counter({ end, suffix = "" }) {
 function AmbientBackground() {
   return (
     <div className="ambient-bg" aria-hidden="true">
-      <div className="orb orb-1" />
-      <div className="orb orb-2" />
-      <div className="orb orb-3" />
-      <div className="noise-overlay" />
-      <div className="dot-grid" />
+      <div className="mesh-gradient" />
+    </div>
+  );
+}
+
+function SkillsMarquee() {
+  const skills = [
+    "AutoCAD", "SAP2000", "Structural Design", "Site Supervision",
+    "Math Tutoring", "Calculus Specialist", "CapCut", "Canva",
+    "Technical Design", "Concrete Structures", "Construction Management"
+  ];
+  return (
+    <div className="skills-marquee">
+      <div className="marquee-inner">
+        {[...skills, ...skills, ...skills].map((s, i) => (
+          <div key={i} className="marquee-pill">
+            <span className="pill-dot" />
+            <span className="pill-txt">{s}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function HeroVisual() {
   const [msgIdx, setMsgIdx] = useState(0);
+  const [isTalking, setIsTalking] = useState(false);
   const msgs = [
     "Welcome to my portfolio!",
     "How can I help you today?",
@@ -112,10 +126,14 @@ function HeroVisual() {
     "Welcome! Click me for more!",
   ];
 
-  const nextMsg = () => setMsgIdx((i) => (i + 1) % msgs.length);
+  const nextMsg = () => {
+    setMsgIdx((i) => (i + 1) % msgs.length);
+    setIsTalking(true);
+    setTimeout(() => setIsTalking(false), 2000);
+  };
 
   useEffect(() => {
-    const t = setInterval(nextMsg, 5000);
+    const t = setInterval(nextMsg, 8000);
     return () => clearInterval(t);
   }, []);
 
@@ -123,48 +141,39 @@ function HeroVisual() {
     <div className="hero-visual" aria-hidden="true">
       <div className="bp-frame">
         <svg className="bp-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="10" width="380" height="380" rx="4"
-            stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 8" opacity="0.2"/>
-          <line x1="200" y1="10" x2="200" y2="390" stroke="currentColor" strokeWidth="0.5" opacity="0.22"/>
-          <line x1="10"  y1="200" x2="390" y2="200" stroke="currentColor" strokeWidth="0.5" opacity="0.22"/>
-          <line x1="10"  y1="10"  x2="390" y2="390" stroke="currentColor" strokeWidth="0.3" opacity="0.1"/>
-          <line x1="390" y1="10"  x2="10"  y2="390" stroke="currentColor" strokeWidth="0.3" opacity="0.1"/>
-          <circle cx="200" cy="200" r="175" stroke="currentColor" strokeWidth="0.5" opacity="0.12"/>
-          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 6" opacity="0.18"/>
-          <circle cx="200" cy="200" r="105" stroke="currentColor" strokeWidth="1"   opacity="0.28"/>
-          <circle cx="200" cy="200" r="70"  stroke="currentColor" strokeWidth="1.5" opacity="0.38"/>
-          <circle cx="200" cy="200" r="35"  stroke="currentColor" strokeWidth="1.5" opacity="0.5"/>
-          <circle cx="200" cy="200" r="12"  fill="currentColor"   opacity="0.55"/>
-          <circle cx="200" cy="200" r="5"   fill="currentColor"   opacity="0.9"/>
-          <path d="M15 15 L15 48 M15 15 L48 15"   stroke="currentColor" strokeWidth="1.5" opacity="0.65"/>
-          <path d="M385 15 L385 48 M385 15 L352 15" stroke="currentColor" strokeWidth="1.5" opacity="0.65"/>
-          <path d="M15 385 L15 352 M15 385 L48 385"  stroke="currentColor" strokeWidth="1.5" opacity="0.65"/>
-          <path d="M385 385 L385 352 M385 385 L352 385" stroke="currentColor" strokeWidth="1.5" opacity="0.65"/>
-          <line x1="15"  y1="200" x2="60"  y2="200" stroke="currentColor" strokeWidth="1" opacity="0.45"/>
-          <line x1="340" y1="200" x2="385" y2="200" stroke="currentColor" strokeWidth="1" opacity="0.45"/>
-          <line x1="200" y1="15"  x2="200" y2="60"  stroke="currentColor" strokeWidth="1" opacity="0.45"/>
-          <line x1="200" y1="340" x2="200" y2="385" stroke="currentColor" strokeWidth="1" opacity="0.45"/>
-          <circle cx="200" cy="60"  r="3.5" fill="currentColor" opacity="0.55"/>
-          <circle cx="200" cy="340" r="3.5" fill="currentColor" opacity="0.55"/>
-          <circle cx="60"  cy="200" r="3.5" fill="currentColor" opacity="0.55"/>
-          <circle cx="340" cy="200" r="3.5" fill="currentColor" opacity="0.55"/>
-          <circle cx="151" cy="151" r="2.5" fill="currentColor" opacity="0.3"/>
-          <circle cx="249" cy="151" r="2.5" fill="currentColor" opacity="0.3"/>
-          <circle cx="151" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
-          <circle cx="249" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
+          <rect x="5" y="5" width="390" height="390" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 6" opacity="0.1" />
+
+          <line x1="200" y1="5" x2="200" y2="395" stroke="currentColor" strokeWidth="0.5" opacity="0.1" />
+          <line x1="5" y1="200" x2="395" y2="200" stroke="currentColor" strokeWidth="0.5" opacity="0.1" />
+
+          <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="0.5" opacity="0.08" />
+          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 4" opacity="0.12" />
+          <circle cx="200" cy="200" r="100" stroke="currentColor" strokeWidth="1" opacity="0.15" />
+
+          <g opacity="0.2">
+            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map(deg => (
+              <line key={deg} x1="200" y1="20" x2="200" y2="35" stroke="currentColor" strokeWidth="1.5"
+                transform={`rotate(${deg}, 200, 200)`} />
+            ))}
+          </g>
+
+          <circle cx="200" cy="200" r="15" fill="currentColor" opacity="0.1" />
         </svg>
-        <div className="char-wrap" onClick={nextMsg} style={{ cursor: "pointer" }}>
+
+        <div className={`char-wrap ${isTalking ? "is-talking" : ""}`} onClick={nextMsg} style={{ cursor: "pointer" }}>
           <div className="char-circle">
+            <div className="char-glow" />
             <img src={charImg} alt="Welcome" className="hero-char" />
+            <div className="mouth-anim" />
           </div>
           <div className="welcome-bubble">{msgs[msgIdx]}</div>
         </div>
+
         <div className="float-tag ft-tl">AutoCAD</div>
         <div className="float-tag ft-tr">SAP2000</div>
         <div className="float-tag ft-bl">Site Supervision</div>
         <div className="float-tag ft-br">Structural Design</div>
       </div>
-      <p className="hero-bg-word">ENGINEER</p>
     </div>
   );
 }
@@ -232,7 +241,7 @@ function YouTubeSection() {
             <div className="yt-info">
               <h3 className="yt-title">Engineering & Mathematics Tutorials</h3>
               <p className="yt-desc">
-                I share my knowledge through detailed tutorials, simplifying complex civil engineering 
+                I share my knowledge through detailed tutorials, simplifying complex civil engineering
                 concepts and mathematics for university and high school students.
               </p>
               <div className="yt-benefits">
@@ -270,81 +279,81 @@ function YouTubeSection() {
 
 function HomePage({ onNavigate }) {
   return (
-    <div>
-    <div className="page-home">
-      <div className="hero-wrap">
-        <div className="hero-left">
-          <Reveal>
-            <span className="status-pill">
-              <span className="status-dot" />
-              Available for opportunities
-            </span>
-          </Reveal>
+    <div className="page-home-root">
+      <div className="page-home">
+        <div className="section-wrap">
+          <div className="hero-wrap">
+            <div className="hero-left">
+              <Reveal>
+                <div className="hero-eyebrow">
+                  <span className="exp-badge">
+                    <span className="exp-dot" />
+                    Available for opportunities
+                  </span>
+                </div>
+                <h1 className="hero-head">
+                  <span className="hh-line">
+                    <i>I&apos;m Mahmoud Saad</i>
+                  </span>
+                  <span className="hh-line">
+                    <b>Civil Engineer</b>
+                    <span>&amp;</span>
+                    <b>Math Tutor</b>
+                  </span>
+                  <span className="hh-line">
+                    <i>Based in</i>
+                    <b>Istanbul</b>
+                  </span>
+                </h1>
+              </Reveal>
 
-          <Reveal delay={0.12}>
-            <h1 className="hero-name">
-              <span className="hn-1">Mahmoud</span>
-              <span className="hn-2">Ahmed <em>Saad</em></span>
-            </h1>
-          </Reveal>
+              <Reveal delay={0.22}>
+                <p className="hero-bio">
+                  I build practical structural solutions and help students master
+                  mathematics through clear, step-by-step teaching. I focus on
+                  quality execution, strong communication, and measurable results.
+                </p>
+              </Reveal>
 
-          <Reveal delay={0.22}>
-            <div className="hero-role-row">
-              <span className="role-bar" />
-              <span className="role-text">Civil Engineer · Math Tutor · Site Supervisor</span>
+              <Reveal delay={0.3}>
+                <div className="hero-btns">
+                  <button className="btn-primary btn-capsule" onClick={() => onNavigate("Contact")}>
+                    Get In Touch <Icons.ArrowRight />
+                  </button>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.4}>
+                <div className="hero-stats">
+                  {[
+                    { n: 4, s: "+", l: "Professional Roles" },
+                    { n: 3, s: "", l: "Languages" },
+                    { n: 4, s: "+", l: "Years Tutoring" },
+                  ].map((st, i) => (
+                    <div key={i} className="stat-cell">
+                      <span className="stat-num"><Counter end={st.n} suffix={st.s} /></span>
+                      <span className="stat-lbl">{st.l}</span>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
 
-          <Reveal delay={0.3}>
-            <p className="hero-bio">
-              Specializing in <span className="bio-hl">site supervision</span>,{" "}
-              <span className="bio-hl">structural analysis</span>, and technical office operations.
-              Building strong foundations — in concrete and in knowledge.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.4}>
-            <div className="hero-btns">
-              <a href={CV_LINK} download="Mahmoud_Ahmed_Saad_CV.pdf" className="btn-primary">
-                <Icons.Download /> Download CV
-              </a>
-              <button className="btn-ghost" onClick={() => onNavigate("Contact")}>
-                Get in Touch <Icons.ArrowRight />
-              </button>
+            <div className="hero-right">
+              <HeroVisual />
             </div>
-          </Reveal>
+          </div>
 
           <Reveal delay={0.5}>
-            <div className="hero-stats">
-              {[
-                { n: 4, s: "+", l: "Professional Roles"  },
-                { n: 3, s: "",  l: "Languages Spoken"    },
-                { n: 9, s: "+", l: "Months on Site"      },
-              ].map((st, i) => (
-                <div key={i} className="stat-cell">
-                  <span className="stat-num"><Counter end={st.n} suffix={st.s} /></span>
-                  <span className="stat-lbl">{st.l}</span>
-                </div>
-              ))}
-            </div>
+            <SkillsMarquee />
           </Reveal>
         </div>
-
-        <div className="hero-right">
-          <HeroVisual />
-        </div>
       </div>
 
-      <div className="scroll-cue">
-        <span className="scroll-cue-text">Scroll to explore</span>
-        <span className="scroll-cue-icon"><Icons.ChevronDown /></span>
-      </div>
-    </div>
-
-    <div className="home-sec"><ExperiencePage /></div>
-    <div className="home-sec"><YouTubeSection /></div>
-    <div className="home-sec"><SkillsPage /></div>
-    <div className="home-sec"><ContactPage /></div>
+      <div className="home-sec"><ExperiencePage /></div>
+      <div className="home-sec"><YouTubeSection /></div>
+      <div className="home-sec"><SkillsPage /></div>
+      <div className="home-sec"><ContactPage /></div>
     </div>
   );
 }
@@ -405,9 +414,9 @@ function ExperiencePage() {
   ];
 
   const tagMeta = {
-    current:     { label: "Current",     cls: "chip-current"     },
+    current: { label: "Current", cls: "chip-current" },
     engineering: { label: "Engineering", cls: "chip-engineering" },
-    teaching:    { label: "Teaching",    cls: "chip-teaching"    },
+    teaching: { label: "Teaching", cls: "chip-teaching" },
   };
 
   return (
@@ -454,10 +463,11 @@ function ExperiencePage() {
 
 function SkillsPage() {
   const services = [
-    { num: "01", title: "Site Supervision",    desc: "On-site construction supervision for foundations, reinforcement, and concrete works with strict safety compliance.", tags: ["Foundations", "Concrete", "Safety"] },
-    { num: "02", title: "Technical Office",     desc: "Quantity take-offs, structural drawing interpretation, documentation, and coordination between site and office.", tags: ["Take-offs", "Drawings", "Reports"] },
-    { num: "03", title: "Mathematics Tutoring",       desc: "Comprehensive private and online tutoring for Middle School, High School, and University students. Expert guidance in Calculus 1 & 2, Differential Equations, and Civil Engineering courses.", tags: ["Calculus 1 & 2", "Middle & High School", "University Math"] },
+    { num: "01", title: "Site Supervision", desc: "On-site construction supervision for foundations, reinforcement, and concrete works with strict safety compliance.", tags: ["Foundations", "Concrete", "Safety"] },
+    { num: "02", title: "Technical Office", desc: "Quantity take-offs, structural drawing interpretation, documentation, and coordination between site and office.", tags: ["Take-offs", "Drawings", "Reports"] },
+    { num: "03", title: "Mathematics Tutoring", desc: "Comprehensive private and online tutoring for Middle School, High School, and University students. Expert guidance in Calculus 1 & 2, Differential Equations, and Civil Engineering courses.", tags: ["Calculus 1 & 2", "Middle & High School", "University Math"] },
     { num: "04", title: "Engineering Software", desc: "Structural design and analysis using AutoCAD for drafting and SAP2000 for structural modeling and load analysis.", tags: ["AutoCAD", "SAP2000", "Engineering Apps"] },
+    { num: "05", title: "Creative Design & Tech", desc: "Creating professional logos and visual designs using Canva, and high-quality video editing with CapCut for educational or professional content.", tags: ["Logo Design", "Canva", "CapCut"] },
   ];
 
   const tools = ["AutoCAD", "SAP2000", "Civil Engineering Software Apps", "CapCut", "Canva", "Microsoft Office", "Excel", "Structural Analysis", "Quantity Take-offs", "Reinforced Concrete Design", "Foundation Design", "Site Supervision", "Technical Documentation"];
@@ -543,7 +553,7 @@ function ContactPage() {
   const submit = async e => {
     e.preventDefault();
     setStatus("sending");
-    
+
     try {
       // Using your real Formspree ID
       const response = await fetch("https://formspree.io/f/mlgabyab", {
@@ -556,7 +566,7 @@ function ContactPage() {
           _subject: `New Portfolio Message from ${form.name}`
         })
       });
-      
+
       if (response.ok) {
         setStatus("success");
         setForm({ name: "", email: "", message: "" });
@@ -570,11 +580,11 @@ function ContactPage() {
   };
 
   const contacts = [
-    { icon: <Icons.Mail />,     label: "Email",            value: "mabdelhady322@gmail.com", href: "mailto:mabdelhady322@gmail.com" },
-    { icon: <Icons.Phone />,    label: "Phone / WhatsApp", value: "+90 544 185 19 08",        href: "tel:+905441851908"              },
-    { icon: <Icons.Linkedin />, label: "LinkedIn",         value: "View Profile →",           href: LINKEDIN_URL                     },
-    { icon: <Icons.Youtube />,  label: "YouTube",          value: "Watch Tutorials →",        href: YOUTUBE_URL                      },
-    { icon: <Icons.MapPin />,   label: "Location",         value: "Istanbul, Turkey",         href: null                             },
+    { icon: <Icons.Mail />, label: "Email", value: "mabdelhady322@gmail.com", href: "mailto:mabdelhady322@gmail.com" },
+    { icon: <Icons.Phone />, label: "Phone / WhatsApp", value: "+90 544 185 19 08", href: "tel:+905441851908" },
+    { icon: <Icons.Linkedin />, label: "LinkedIn", value: "View Profile →", href: LINKEDIN_URL },
+    { icon: <Icons.Youtube />, label: "YouTube", value: "Watch Tutorials →", href: YOUTUBE_URL },
+    { icon: <Icons.MapPin />, label: "Location", value: "Istanbul, Turkey", href: null },
   ];
 
   return (
@@ -651,10 +661,10 @@ function ContactPage() {
 const PAGES = ["Home", "Experience", "Skills", "Contact"];
 
 export default function App() {
-  const [activePage,   setActivePage]   = useState("Home");
-  const [displayPage,  setDisplayPage]  = useState("Home");
-  const [isExiting,    setIsExiting]    = useState(false);
-  const [mousePos,     setMousePos]     = useState({ x: -400, y: -400 });
+  const [activePage, setActivePage] = useState("Home");
+  const [displayPage, setDisplayPage] = useState("Home");
+  const [isExiting, setIsExiting] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: -400, y: -400 });
 
   useEffect(() => {
     const onMouse = e => setMousePos({ x: e.clientX, y: e.clientY });
@@ -708,24 +718,24 @@ export default function App() {
 
         <main className="main">
           <div key={displayPage} className={`page-wrap ${isExiting ? "page-exit" : "page-enter"}`}>
-            {displayPage === "Home"       && <HomePage       onNavigate={navigate} />}
+            {displayPage === "Home" && <HomePage onNavigate={navigate} />}
             {displayPage === "Experience" && <ExperiencePage />}
-            {displayPage === "Skills"     && <SkillsPage />}
-            {displayPage === "Contact"    && <ContactPage />}
+            {displayPage === "Skills" && <SkillsPage />}
+            {displayPage === "Contact" && <ContactPage />}
+
+            <footer className="footer">
+              <div className="nav-inner footer-inner">
+                <span className="footer-copy">© 2026 Mahmoud Ahmed Saad — Civil Engineer</span>
+                <div className="footer-links">
+                  <a href="mailto:mabdelhady322@gmail.com" className="footer-link">Email</a>
+                  <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="footer-link">LinkedIn</a>
+                  <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="footer-link">YouTube</a>
+                  <span className="footer-loc">Istanbul, Turkey</span>
+                </div>
+              </div>
+            </footer>
           </div>
         </main>
-
-        <footer className="footer">
-          <div className="nav-inner footer-inner">
-            <span className="footer-copy">© 2026 Mahmoud Ahmed Saad — Civil Engineer</span>
-            <div className="footer-links">
-              <a href="mailto:mabdelhady322@gmail.com" className="footer-link">Email</a>
-              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="footer-link">LinkedIn</a>
-              <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="footer-link">YouTube</a>
-              <span className="footer-loc">Istanbul, Turkey</span>
-            </div>
-          </div>
-        </footer>
       </div>
     </>
   );
@@ -761,28 +771,9 @@ const css = (T) => `
     background: var(--bg); color: var(--white);
     font-family: var(--sans); line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ─── Ambient background ─── */
   .ambient-bg {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background:
-      radial-gradient(ellipse 80% 55% at 60% -10%, rgba(245,158,11,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 55% 50% at 10% 90%, rgba(82,82,91,0.15) 0%, transparent 60%),
-      var(--bg);
-  }
-  .orb {
-    position: absolute; border-radius: 50%;
-    filter: blur(100px); will-change: transform;
-    animation: orbFloat 26s ease-in-out infinite alternate;
-  }
-  .orb-1 { width: 55vw; height: 55vw; top: -15%; right: -10%; background: rgba(245,158,11,0.09); animation-duration: 30s; }
-  .orb-2 { width: 45vw; height: 45vw; bottom: -12%; left: -8%; background: rgba(82,82,91,0.2); animation-duration: 22s; animation-delay: -9s; }
-  .orb-3 { width: 28vw; height: 28vw; top: 45%; left: 32%; background: rgba(245,158,11,0.04); animation-duration: 18s; animation-delay: -4s; }
-  .noise-overlay {
-    position: absolute; inset: 0; opacity: 0.35;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   }
   .dot-grid {
     position: absolute; inset: 0;
@@ -799,18 +790,19 @@ const css = (T) => `
 
   /* ─── Cursor glow ─── */
   .cursor-glow {
-    position: fixed; width: 700px; height: 700px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(245,158,11,0.065) 0%, transparent 62%);
+    position: fixed; width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);
     pointer-events: none; z-index: 1;
     transform: translate(-50%,-50%);
-    transition: left 0.07s linear, top 0.07s linear;
+    mix-blend-mode: multiply;
+    transition: left 0.12s cubic-bezier(0.23, 1, 0.32, 1), top 0.12s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   /* ─── App shell ─── */
   .app-wrap {
     position: relative; z-index: 10;
     display: flex; flex-direction: column;
-    height: 100vh; overflow: hidden;
+    min-height: 100vh; width: 100%;
   }
 
   /* ─── Shared Layout inner ─── */
@@ -821,60 +813,53 @@ const css = (T) => `
   
   /* ─── Navbar ─── */
   .navbar {
-    flex-shrink: 0; z-index: 100;
-    height: var(--nav-h); display: flex; align-items: center; justify-content: center;
-    padding: 0 6%;
-    background: rgba(9,9,11,0.75);
-    backdrop-filter: blur(22px) saturate(1.5);
-    -webkit-backdrop-filter: blur(22px) saturate(1.5);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.02), 0 4px 20px rgba(0,0,0,0.25);
+    height: var(--nav-h); border-bottom: 1px solid var(--border);
+    background: rgba(245,244,240,0.8); backdrop-filter: blur(30px);
+    z-index: 100; position: sticky; top: 0;
+  }
+  .nav-inner {
+    margin: 0 auto; height: 100%; width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
   }
   .nav-logo {
-    font-family: var(--display); font-size: 22px; font-weight: 800;
-    color: var(--white); background: none; border: none; cursor: pointer;
-    letter-spacing: -0.03em; padding: 0; line-height: 1;
-    transition: opacity 0.2s;
+    font-family: var(--display); font-size: 20px; font-weight: 400;
+    color: var(--accent); background: none; border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 2px;
   }
-  .nav-logo:hover { opacity: 0.8; }
-  .logo-dot { color: var(--accent); }
-  .nav-links { display: flex; align-items: center; gap: 2px; }
+  .logo-dot { color: var(--accent); opacity: 0.3; }
+  .nav-links { display: flex; align-items: center; gap: 8px; }
   .nav-item {
-    position: relative; background: none; border: none; cursor: pointer;
-    padding: 8px 16px; color: var(--muted); font-family: var(--sans);
-    font-size: 14px; font-weight: 500; border-radius: 8px;
-    transition: color 0.2s, background 0.2s;
+    padding: 10px 20px; color: var(--muted); background: none; border: none;
+    font-size: 14px; font-weight: 500; cursor: pointer; border-radius: 100px;
+    transition: all 0.25s ease; position: relative; font-family: var(--sans);
     display: flex; flex-direction: column; align-items: center; gap: 4px;
   }
-  .nav-item:hover { color: var(--white); background: var(--surface); }
-  .nav-active { color: var(--white); }
+  .nav-item:hover { color: var(--accent); background: rgba(0,0,0,0.03); }
+  .nav-active { color: var(--accent); }
   .nav-pip {
     position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
     width: 4px; height: 4px; border-radius: 50%;
-    background: var(--accent); box-shadow: 0 0 8px var(--accent);
+    background: var(--accent);
     animation: pipIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
   }
   @keyframes pipIn { from { opacity: 0; transform: translateX(-50%) scale(0); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
   .nav-end { display: flex; align-items: center; gap: 10px; }
   .btn-hire {
-    padding: 9px 22px; background: var(--soft); color: var(--accent);
-    border: 1px solid rgba(245,158,11,0.3); border-radius: 100px;
+    padding: 10px 24px; background: #1c1917; color: #fff;
+    border: none; border-radius: 100px;
     font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--sans);
-    transition: all 0.25s ease; white-space: nowrap; letter-spacing: 0.01em;
+    transition: all 0.25s ease; white-space: nowrap;
   }
-  .btn-hire:hover, .btn-hire-on {
-    background: var(--accent); color: var(--bg);
-    border-color: var(--accent); box-shadow: 0 0 24px var(--glow);
-  }
+  .btn-hire:hover { background: #000; transform: scale(1.03); }
 
   /* ─── Main + page transitions ─── */
   .main {
-    flex: 1; position: relative; overflow: hidden;
-    min-height: 0;
+    flex: 1; display: flex; flex-direction: column;
+    position: relative;
   }
   .page-wrap {
-    position: absolute; inset: 0;
-    overflow-y: auto; overflow-x: hidden;
+    flex: 1; display: flex; flex-direction: column;
+    width: 100%;
   }
   .page-wrap::-webkit-scrollbar { width: 4px; }
   .page-wrap::-webkit-scrollbar-track { background: transparent; }
@@ -898,12 +883,18 @@ const css = (T) => `
   /* ─── Page layouts ─── */
   /* ─── YouTube Section ─── */
   .section-yt { padding-top: 100px; }
-  .yt-card { padding: 48px; background: linear-gradient(135deg, rgba(20,20,23,0.9) 0%, rgba(30,30,35,0.8) 100%); }
-  .yt-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 60px; align-items: center; }
-  .yt-title { font-family: var(--display); font-size: 32px; font-weight: 800; color: var(--white); margin-bottom: 20px; }
-  .yt-desc { font-size: 17px; color: var(--muted); line-height: 1.8; margin-bottom: 30px; }
-  .yt-benefits { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
-  .yt-benefit { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--white); }
+  .yt-card { 
+    padding: 64px; 
+    background: #fff; 
+    border-radius: 32px; 
+    border: 1px solid var(--border);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.04);
+  }
+  .yt-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; }
+  .yt-title { font-family: var(--display); font-size: 42px; font-weight: 400; color: var(--accent); margin-bottom: 24px; }
+  .yt-desc { font-size: 18px; color: var(--muted); line-height: 1.8; margin-bottom: 36px; font-weight: 300; }
+  .yt-benefits { display: flex; flex-direction: column; gap: 16px; margin-bottom: 44px; }
+  .yt-benefit { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--muted); }
   
   .yt-visual { position: relative; }
   .yt-thumb {
@@ -929,12 +920,61 @@ const css = (T) => `
   .yt-skel-line:nth-child(3) { width: 90%; }
 
   .page-home {
-    min-height: calc(100vh - var(--nav-h));
+    min-height: 100vh;
     display: flex; flex-direction: column;
-    padding: 60px 6% 40px;
+    padding: 60px 4% 40px;
+    justify-content: center;
+    position: relative;
   }
-  .page-section { padding: 88px 6% 108px; min-height: calc(100vh - var(--nav-h)); }
-  .section-wrap { max-width: 1240px; margin: 0 auto; width: 100%; }
+  .page-home::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: -1;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+  .page-section { padding: 120px 4% 140px; min-height: calc(100vh - var(--nav-h)); }
+  .section-wrap { margin: 0 auto; width: 100%; }
+
+  /* Skills Marquee */
+  .skills-marquee {
+    margin-top: 32px; overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+    padding: 12px 0;
+  }
+  .marquee-inner { 
+    display: inline-flex; animation: marquee-scroll 70s linear infinite; gap: 20px; 
+    padding: 10px 0;
+  }
+  
+  .marquee-pill {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 24px; border: 1px solid var(--border);
+    border-radius: 999px; background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap; cursor: default;
+  }
+  .marquee-pill:hover {
+    background: #fff; border-color: var(--accent);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+  }
+  .pill-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); opacity: 0.15;
+    transition: all 0.3s ease;
+  }
+  .marquee-pill:hover .pill-dot { opacity: 1; transform: scale(1.2); background: #10b981; }
+  
+  .pill-txt {
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    font-family: var(--sans);
+    transition: color 0.3s ease;
+  }
+  .marquee-pill:hover .pill-txt { color: var(--accent); }
+  
+  @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-33.33%); } }
 
   /* ─── Section header ─── */
   .section-header { margin-bottom: 64px; }
@@ -954,11 +994,18 @@ const css = (T) => `
   /* ─── Hero ─── */
   .hero-wrap {
     flex: 1; display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 80px; align-items: center;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(36px, 5vw, 64px);
+    align-items: start;
     max-width: 1240px; width: 100%; margin: 0 auto;
   }
-  .hero-left { display: flex; flex-direction: column; }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    max-width: 620px;
+    animation: heroFadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hero-btns { display: flex; align-items: center; gap: 14px; margin-top: 30px; }
 
   .status-pill {
     display: inline-flex; align-items: center; gap: 9px;
@@ -977,32 +1024,19 @@ const css = (T) => `
     50%       { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
   }
 
-  .hero-name {
-    font-family: var(--display); line-height: 1.0;
-    letter-spacing: -0.04em; margin: 22px 0 0;
+  .hero-stats {
+    display: flex; margin-top: 60px; padding-top: 48px;
+    border-top: 1px solid var(--border);
   }
-  .hn-1, .hn-2 { display: block; }
-  .hn-1 {
-    font-size: clamp(52px, 8.5vw, 96px); font-weight: 800; color: var(--white);
+  .stat-cell {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+    padding-right: 48px;
   }
-  .hn-2 {
-    font-size: clamp(52px, 8.5vw, 96px); font-weight: 800;
-    background: linear-gradient(125deg, var(--white) 25%, var(--accent) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  .stat-num {
+    font-family: var(--display); font-size: 48px; font-weight: 400;
+    color: var(--accent); line-height: 1; letter-spacing: -0.02em;
   }
-  .hn-2 em {
-    font-style: italic; font-weight: 400;
-    background: none; -webkit-text-fill-color: var(--muted);
-  }
-
-  .hero-role-row { display: flex; align-items: center; gap: 16px; margin-top: 22px; }
-  .role-bar  { width: 28px; height: 2px; background: var(--accent); flex-shrink: 0; }
-  .role-text { font-size: 13px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
-
-  .hero-bio { font-size: 18px; color: var(--muted); line-height: 1.8; max-width: 620px; margin-top: 24px; }
-  .bio-hl { color: var(--white); font-weight: 500; }
-
-  .hero-btns { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
+  .stat-lbl { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
 
   .btn-primary {
     padding: 14px 30px; background: var(--accent); color: var(--bg);
@@ -1048,32 +1082,230 @@ const css = (T) => `
   .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
 
   /* ─── Hero visual / blueprint ─── */
-  .hero-right { display: flex; align-items: center; justify-content: center; }
-  .hero-visual { position: relative; width: 100%; max-width: 520px; }
+  .hero-right {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 8px;
+    animation: heroFadeIn 0.9s ease-out both;
+    animation-delay: 0.15s;
+  }
+  .hero-visual {
+    position: relative;
+    width: 100%;
+    max-width: 540px;
+    margin-inline: auto;
+    animation: heroFloat 6s ease-in-out infinite;
+  }
   .bp-frame { position: relative; width: 100%; aspect-ratio: 1; }
   
+  .hero-head {
+    font-family: var(--display);
+    font-size: clamp(38px, 6vw, 72px);
+    line-height: 1.1; color: var(--white);
+    margin-bottom: 24px;
+  }
+  .hh-line { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  .hh-line b { font-weight: 500; letter-spacing: -0.02em; }
+  .hh-line i { font-family: var(--display); font-style: italic; font-weight: 300; color: var(--dim); }
+  
+  .pill-img {
+    display: inline-flex; width: clamp(44px, 8vw, 88px); height: clamp(28px, 4vw, 44px);
+    border-radius: 100px; overflow: hidden; background: #fff;
+    border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  }
+  .pill-img img { width: 100%; height: 100%; object-fit: cover; }
+  .pill-ico {
+    display: inline-flex; width: 44px; height: 44px;
+    background: #fff; border: 1px solid var(--border); border-radius: 50%;
+    align-items: center; justify-content: center; font-size: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+
+  .btn-capsule {
+    padding: 20px 52px; border-radius: 100px; background: #1c1917; color: #fff;
+    font-weight: 600; font-size: 16px; border: none;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .ambient-bg {
+    position: fixed; inset: 0; z-index: -1;
+    background: #f5f4f0;
+    overflow: hidden;
+  }
+  .mesh-gradient {
+    position: absolute; inset: -50%;
+    background-image: 
+      radial-gradient(at 10% 20%, rgba(28, 25, 23, 0.06) 0px, transparent 50%),
+      radial-gradient(at 90% 10%, rgba(120, 113, 108, 0.12) 0px, transparent 50%),
+      radial-gradient(at 40% 80%, rgba(168, 162, 158, 0.08) 0px, transparent 50%),
+      radial-gradient(at 70% 30%, rgba(28, 25, 23, 0.04) 0px, transparent 50%);
+    filter: blur(100px);
+    animation: meshFlow 20s ease-in-out infinite alternate;
+  }
+  @keyframes meshFlow {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(5%, 5%) rotate(5deg); }
+  }
+  .hero-bio {
+    font-size: 17px;
+    color: #57534e;
+    line-height: 1.8;
+    max-width: 56ch;
+    margin-top: 22px;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+    font-family: var(--sans);
+    animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.16s;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 22px;
+    font-family: var(--sans);
+  }
+  .exp-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 24px;
+    min-height: 52px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(180deg, rgba(24, 24, 27, 0.86), rgba(10, 10, 11, 0.9));
+    color: #f5f5f4;
+    font-size: clamp(15px, 2vw, 20px);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 14px 34px rgba(0,0,0,0.24);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: badgeGlow 4s ease infinite;
+  }
+  .exp-badge::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    pointer-events: none;
+  }
+  @keyframes badgeGlow {
+    0%, 100% { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 14px 34px rgba(0,0,0,0.24); }
+    50% { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07), 0 16px 42px rgba(0,0,0,0.30); }
+  }
+  .exp-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.18), 0 0 16px rgba(16, 185, 129, 0.55);
+    flex-shrink: 0;
+    animation: dotPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 5px rgba(16,185,129,0.18), 0 0 16px rgba(16,185,129,0.55); }
+    50% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(16,185,129,0.10), 0 0 20px rgba(16,185,129,0.65); }
+  }
+
+  .hero-head {
+    font-size: clamp(38px, 4.8vw, 66px);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    margin-bottom: 4px;
+    font-family: var(--display);
+    color: #1c1917;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.08s;
+  }
+  .hh-line { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .hh-line i { font-style: normal; font-weight: 500; color: #292524; }
+  .hh-line b { font-weight: 800; color: #1c1917; }
+  .pill-img { 
+    height: clamp(28px, 3.5vw, 42px); aspect-ratio: 1.8; 
+    border-radius: 100px; overflow: hidden; border: 1px solid var(--border);
+    background: #fff; transform: rotate(-1deg); box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .btn-capsule {
+    padding: 16px 34px; font-size: 14px; font-weight: 600;
+    background: #1c1917; color: #fff;
+    border-radius: 100px; border: none; cursor: pointer;
+    box-shadow: 0 10px 26px rgba(28,25,23,0.14);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--sans);
+    animation: heroFadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.22s;
+  }
+  .btn-capsule:hover { 
+    background: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px rgba(28,25,23,0.2);
+  }
+  .btn-capsule svg {
+    transition: transform 0.25s ease;
+  }
+  .btn-capsule:hover svg {
+    transform: translateX(3px);
+  }
+  .pill-img img { width: 100%; height: 100%; object-fit: cover; }
+  .pill-ico {
+    padding: 6px 16px; background: #fff; border: 1px solid var(--border);
+    border-radius: 100px; font-size: 18px; transform: rotate(2deg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+
   .char-wrap {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: clamp(120px, 15vw, 150px); height: clamp(20px, 15vw, 150px);
-    z-index: 10;
+    width: clamp(140px, 18vw, 190px); height: clamp(140px, 18vw, 190px);
+    z-index: 10; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
   }
+  .char-wrap:hover { transform: translate(-50%, -50%) scale(1.08); }
+  
   .char-circle {
     width: 100%; height: 100%; border-radius: 50%;
-    border: 3px solid var(--accent); overflow: hidden;
-    background: var(--card); box-shadow: 0 0 40px var(--glow);
-    display: flex; align-items: center; justify-content: center;
+    border: 2px solid #fff; overflow: hidden;
+    background: #fff; box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+    display: flex; align-items: center; justify-content: center; position: relative;
   }
-  .hero-char { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
+  .char-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-char { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); }
   
+  .mouth-anim {
+    position: absolute; bottom: 34%; left: 51%;
+    width: 22px; height: 6px; background: rgba(0,0,0,0.25);
+    border-radius: 50%; opacity: 0; transform: translateX(-50%);
+    transition: opacity 0.3s;
+  }
+  .is-talking .mouth-anim {
+    opacity: 1;
+    animation: mouthPop 0.15s infinite alternate;
+  }
+  @keyframes mouthPop {
+    from { height: 2px; width: 18px; }
+    to   { height: 12px; width: 24px; }
+  }
+  .float-tag:hover {
+    transform: scale(1.1) rotate(2deg);
+    background: #000;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    z-index: 50;
+  }
   .welcome-bubble {
-    position: absolute; top: -15px; left: 100%;
+    position: absolute; top: -10px; left: 100%;
     transform: none; white-space: nowrap;
-    background: var(--accent); color: var(--bg);
-    padding: 8px 16px; border-radius: 16px 16px 16px 0;
-    font-weight: 800; font-size: 14px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    animation: float-bubble 3s ease-in-out infinite;
+    background: #1c1917; color: #fff;
+    padding: 10px 20px; border-radius: 20px 20px 20px 0;
+    font-weight: 500; font-size: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    animation: float-bubble 4s ease-in-out infinite;
     z-index: 20;
   }
   @keyframes float-bubble {
@@ -1083,19 +1315,19 @@ const css = (T) => `
 
   .bp-svg {
     width: 100%; height: 100%; color: var(--accent);
-    animation: bpSpin 90s linear infinite;
-    filter: drop-shadow(0 0 24px rgba(245,158,11,0.12));
+    animation: bpSpin 120s linear infinite;
+    filter: drop-shadow(0 0 20px rgba(0,0,0,0.02));
   }
   @keyframes bpSpin { to { transform: rotate(360deg); } }
 
   .float-tag {
-    position: absolute; background: rgba(20,20,23,0.85);
-    border: 1px solid var(--border); border-radius: 100px;
-    padding: 7px 16px; font-size: 12px; font-weight: 500;
-    color: var(--white); white-space: nowrap;
-    backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
-    letter-spacing: 0.01em;
+    position: absolute; background: #1c1917;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+    padding: 8px 20px; font-size: 13px; font-weight: 500;
+    color: #ffffff; white-space: nowrap;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    letter-spacing: 0.02em; z-index: 20;
   }
   .ft-tl { top: 18%; left: -6%;  animation: ftBob 4.8s ease-in-out infinite alternate; }
   .ft-tr { top: 14%; right: -4%; animation: ftBob 5.4s ease-in-out infinite alternate-reverse; }
@@ -1285,67 +1517,67 @@ const css = (T) => `
   }
 
   .mobile-nav {
-    position: relative; /* sit above ::before */
-    z-index: 1;
+    position: relative; z-index: 1;
     width: 300px; height: 100%;
-    /* Completely opaque — no see-through */
-    background-color: #09090b;
-    border-left: 2px solid rgba(245,158,11,0.25);
+    background-color: var(--bg);
+    border-left: 1px solid var(--border);
     display: flex; flex-direction: column; padding: 48px 24px 40px;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: -16px 0 60px rgba(0,0,0,0.9);
+    box-shadow: -10px 0 50px rgba(0,0,0,0.05);
     overflow-y: auto;
   }
   .mobile-overlay.open .mobile-nav { transform: translateX(0); }
   
   .mobile-logo {
-    font-family: var(--display); font-size: 28px; font-weight: 800;
-    color: var(--white); margin-bottom: 60px; letter-spacing: -0.02em;
+    font-family: var(--display); font-size: 24px; font-weight: 500;
+    color: var(--accent); margin-bottom: 48px;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .mobile-logo span { color: var(--accent); }
   
-  .mobile-nav-list { display: flex; flex-direction: column; gap: 12px; }
+  .mobile-nav-list { display: flex; flex-direction: column; gap: 8px; }
   
   .mobile-nav-item {
-    background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px;
-    color: var(--white); font-size: 18px; font-weight: 700; font-family: var(--display);
-    padding: 20px 24px; cursor: pointer;
-    display: flex; align-items: center; gap: 16px;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    color: var(--muted); font-size: 16px; font-weight: 500; font-family: var(--sans);
+    padding: 18px 20px; cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
     transition: all 0.2s ease; text-align: left;
     width: 100%;
   }
   .mobile-nav-item.active { 
     color: var(--accent); 
-    background: var(--soft); 
+    background: #fff;
     border-color: var(--accent);
-    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.15);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
   }
-  .mobile-nav-item:hover  { background: var(--surface-hov); transform: translateX(-4px); }
-  .mobile-num { font-size: 12px; color: var(--accent); font-weight: 800; font-family: var(--sans); opacity: 0.6; }
+  .mobile-nav-item:hover { color: var(--accent); transform: translateX(-4px); }
+  .mobile-num { font-size: 11px; color: var(--accent); font-weight: 600; opacity: 0.5; }
 
   /* ─── Footer ─── */
   .footer {
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    padding: 0 6%; height: 52px;
-    border-top: 1px solid var(--border);
-    background: rgba(9,9,11,0.75); backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
-    z-index: 50;
+    padding: 40px 0 32px; border-top: 1px solid var(--border);
+    background: var(--bg); color: var(--muted); z-index: 10;
+    margin-top: auto;
   }
-  .footer-copy  { font-size: 12px; color: var(--dim); }
-  .footer-links { display: flex; align-items: center; gap: 20px; }
-  .footer-link  { font-size: 12px; color: var(--dim); text-decoration: none; transition: color 0.2s; }
-  .footer-link:hover { color: var(--white); }
-  .footer-loc   { font-size: 12px; color: var(--dim); }
+  .footer-inner { 
+    margin: 0 auto; width: 100%; padding: 0 4%;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-copy { font-size: 13px; font-weight: 400; color: var(--dim); }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-link {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    transition: all 0.3s ease; font-weight: 500;
+  }
+  .footer-link:hover { color: var(--accent); transform: translateY(-2px); }
 
   /* ─── Responsive ─── */
   @media (max-width: 1024px) {
     .nav-inner { max-width: 90%; }
     .section-wrap { max-width: 90%; }
     .hero-wrap { grid-template-columns: 1fr; gap: 40px; }
+    .hero-left { max-width: 100%; }
     .hero-right { display: none; }
     .svc-grid { grid-template-columns: 1fr; }
     .edu-lang-grid { grid-template-columns: 1fr; }
@@ -1357,7 +1589,7 @@ const css = (T) => `
     .page-home    { padding: 40px 20px 28px; }
     .page-section { padding: 60px 20px 80px; }
     .hn-1, .hn-2  { font-size: clamp(40px, 12vw, 64px); }
-    .hero-btns    { flex-direction: column; }
+    .hero-btns    { flex-direction: column; align-items: stretch; }
     .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
     .hero-stats   { gap: 0; }
     .stat-cell    { padding-right: 16px; }
@@ -1378,6 +1610,328 @@ const css = (T) => `
     .hn-1, .hn-2 { font-size: clamp(36px, 13vw, 52px); }
     .stat-cell:not(:last-child)::after { display: none; }
     .stat-cell { padding-right: 0; }
-    .hero-stats { gap: 24px; flex-direction: column; }
+    .hero-stats { gap: 16px; grid-template-columns: 1fr; }
+  }
+
+  .hero-stats {
+    margin-top: 44px;
+    padding: 22px;
+    border: 1px solid rgba(28, 25, 23, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(8px);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    animation: heroFadeUp 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.28s;
+  }
+  .hero-stats .stat-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+    transition: transform 0.3s ease;
+  }
+  .hero-stats .stat-cell:hover { transform: translateY(-4px); }
+  .hero-stats .stat-cell:not(:last-child)::after { display: none; }
+  .hero-stats .stat-num {
+    font-family: var(--display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    color: #1f1b19;
+    line-height: 1;
+  }
+  .hero-stats .stat-lbl {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+
+  /* ─── App-wide UI polish overrides ─── */
+  .nav-inner,
+  .section-wrap {
+    max-width: 1240px;
+    padding-inline: clamp(16px, 3vw, 36px);
+  }
+
+  .page-home {
+    padding-top: clamp(14px, 2.4vw, 28px);
+    padding-bottom: clamp(16px, 2.4vw, 28px);
+  }
+
+  .page-section {
+    padding-top: clamp(62px, 7vw, 88px);
+    padding-bottom: clamp(68px, 7.5vw, 96px);
+  }
+
+  .section-header {
+    margin-bottom: clamp(34px, 5vw, 64px);
+  }
+
+  .card {
+    border-radius: 18px;
+    border-color: rgba(28, 25, 23, 0.08);
+    box-shadow: 0 8px 24px rgba(28, 25, 23, 0.06);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px rgba(28, 25, 23, 0.12);
+  }
+
+  .hero-wrap {
+    min-height: min(560px, calc(100vh - var(--nav-h) - 36px));
+  }
+  .hero-visual {
+    max-width: 490px;
+  }
+  .hero-bio {
+    max-width: 50ch;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .hero-btns {
+    margin-top: 18px;
+  }
+  .hero-left {
+    gap: 2px;
+  }
+  .hero-head {
+    margin-bottom: 8px;
+    font-size: clamp(34px, 4vw, 56px);
+    line-height: 1.02;
+  }
+  .hero-eyebrow {
+    margin-bottom: 14px;
+  }
+  .exp-badge {
+    gap: 10px;
+    min-height: 40px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(28, 25, 23, 0.12);
+    background: rgba(255, 255, 255, 0.72);
+    color: #1c1917;
+    font-size: clamp(13px, 1.6vw, 16px);
+    box-shadow: 0 6px 18px rgba(28, 25, 23, 0.08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .exp-badge::before {
+    display: none;
+  }
+  .exp-dot {
+    width: 9px;
+    height: 9px;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+  }
+  .hero-stats {
+    margin-top: 20px;
+    padding: 14px;
+    gap: 8px;
+  }
+  .hero-stats .stat-num {
+    font-size: clamp(24px, 3vw, 32px);
+  }
+  .hero-stats .stat-lbl {
+    font-size: 9px;
+  }
+
+  .timeline {
+    gap: 18px;
+    padding-left: 28px;
+  }
+  .tl-card {
+    padding: 24px 24px;
+  }
+
+  .svc-grid,
+  .contact-grid,
+  .edu-lang-grid {
+    gap: 18px;
+  }
+
+  .tools-card,
+  .edu-card,
+  .lang-card,
+  .form-card,
+  .yt-card {
+    border-radius: 20px;
+  }
+
+  .footer {
+    padding-top: 28px;
+    padding-bottom: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .section-wrap,
+    .nav-inner {
+      max-width: 980px;
+      padding-inline: 20px;
+    }
+
+    .page-home {
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --nav-h: 64px;
+    }
+
+    .navbar {
+      padding-inline: 0;
+    }
+
+    .nav-inner,
+    .section-wrap {
+      padding-inline: 16px;
+    }
+
+    .page-home {
+      padding: 14px 0 20px;
+    }
+    .hero-wrap {
+      min-height: auto;
+    }
+    .page-section {
+      padding: 46px 0 54px;
+      min-height: auto;
+    }
+
+    .hero-head {
+      font-size: clamp(30px, 8.8vw, 40px);
+      line-height: 1.08;
+    }
+    .hero-eyebrow {
+      margin-bottom: 10px;
+    }
+    .exp-badge {
+      width: fit-content;
+      justify-content: flex-start;
+      font-size: 13px;
+      padding: 8px 14px;
+      min-height: 36px;
+    }
+    .exp-dot {
+      width: 8px;
+      height: 8px;
+    }
+    .hero-bio {
+      font-size: 14px;
+      line-height: 1.62;
+      margin-top: 10px;
+    }
+    .hero-btns {
+      margin-top: 14px;
+    }
+
+    .hero-stats {
+      margin-top: 16px;
+      padding: 12px;
+      gap: 8px;
+    }
+    .hero-stats .stat-cell {
+      padding: 6px;
+    }
+
+    .yt-card,
+    .svc-card,
+    .tools-card,
+    .edu-card,
+    .lang-card,
+    .vol-card,
+    .form-card,
+    .contact-card,
+    .tl-card {
+      padding: 20px;
+    }
+
+    .timeline {
+      padding-left: 20px;
+    }
+    .tl-dot {
+      left: -24px;
+    }
+
+    .mobile-nav {
+      width: min(86vw, 320px);
+      padding: 34px 18px 24px;
+    }
+    .mobile-logo {
+      margin-bottom: 28px;
+      font-size: 22px;
+    }
+    .mobile-nav-item {
+      font-size: 15px;
+      padding: 14px 16px;
+      border-radius: 10px;
+    }
+
+    .footer {
+      padding: 18px 0 16px;
+    }
+    .footer-copy {
+      font-size: 12px;
+    }
+    .footer-links {
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav-inner,
+    .section-wrap {
+      padding-inline: 12px;
+    }
+
+    .hero-head {
+      font-size: clamp(30px, 10.8vw, 40px);
+    }
+    .hero-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .eyebrow {
+      letter-spacing: 0.14em;
+      font-size: 10px;
+    }
+    .section-title {
+      font-size: clamp(30px, 9vw, 42px);
+    }
+  }
+
+  @keyframes heroFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes heroFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-left,
+    .hero-head,
+    .btn-capsule,
+    .hero-stats,
+    .hero-right,
+    .hero-visual {
+      animation: none !important;
+    }
   }
 `;
