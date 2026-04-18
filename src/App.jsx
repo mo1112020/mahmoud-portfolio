@@ -4,6 +4,7 @@ import cvFile from "./assets/MAHMOUD_AHMED_CV_ATS.pdf";
 
 const CV_LINK = cvFile;
 const LINKEDIN_URL = "https://www.linkedin.com/in/eng-mahmoud-saad-635185249/";
+const YOUTUBE_URL = "https://www.youtube.com/@mahmoudabdelhady6253";
 
 const T = {
   bg:          "#09090b",
@@ -33,6 +34,7 @@ const Icons = {
   ChevronDown:() => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m6 9 6 6 6-6"/></svg>,
   Menu:       () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>,
   X:          () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6 6 18M6 6l12 12"/></svg>,
+  Youtube:    () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>,
 };
 
 // ─── Shared Components ────────────────────────────────────────────────────────
@@ -50,23 +52,8 @@ function ScrollProgress() {
   return <div className="scroll-progress" style={{ transform: `scaleX(${pct / 100})` }} />;
 }
 
-function Reveal({ children, delay = 0, className = "" }) {
-  const [v, setV] = useState(false);
-  const ref = useRef(null);
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setV(true); obs.unobserve(e.target); } },
-      { threshold: 0.07, rootMargin: "40px" }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  return (
-    <div ref={ref} className={`reveal ${v ? "in" : ""} ${className}`}
-      style={{ transitionDelay: `${delay}s` }}>
-      {children}
-    </div>
-  );
+function Reveal({ children, className = "" }) {
+  return <div className={className}>{children}</div>;
 }
 
 function Counter({ end, suffix = "" }) {
@@ -205,6 +192,51 @@ function SectionHeader({ eyebrow, title, accent }) {
 }
 
 // ─── Pages ───────────────────────────────────────────────────────────────────
+function YouTubeSection() {
+  return (
+    <div className="page-section section-yt">
+      <div className="section-wrap">
+        <SectionHeader eyebrow="Content Creation" title="Educational content," accent="on YouTube." />
+        <div className="card yt-card">
+          <div className="yt-grid">
+            <div className="yt-info">
+              <h3 className="yt-title">Engineering & Mathematics Tutorials</h3>
+              <p className="yt-desc">
+                I share my knowledge through detailed tutorials, simplifying complex civil engineering 
+                concepts and mathematics for university and high school students.
+              </p>
+              <div className="yt-benefits">
+                <div className="yt-benefit">
+                  <span className="check-icon"><Icons.Check /></span>
+                  <span>Visual explanations for complex theories</span>
+                </div>
+                <div className="yt-benefit">
+                  <span className="check-icon"><Icons.Check /></span>
+                  <span>Practical engineering software guides</span>
+                </div>
+              </div>
+              <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                <Icons.Youtube /> Visit My Channel
+              </a>
+            </div>
+            <div className="yt-visual">
+              <div className="yt-thumb">
+                <div className="yt-overlay">
+                  <div className="yt-play"><Icons.Youtube /></div>
+                </div>
+                <div className="yt-skeleton">
+                  <div className="yt-skel-line" />
+                  <div className="yt-skel-line" />
+                  <div className="yt-skel-line" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function HomePage({ onNavigate }) {
   return (
@@ -229,7 +261,7 @@ function HomePage({ onNavigate }) {
           <Reveal delay={0.22}>
             <div className="hero-role-row">
               <span className="role-bar" />
-              <span className="role-text">Civil Engineer · Site Supervisor · Educator</span>
+              <span className="role-text">Civil Engineer · Math Tutor · Site Supervisor</span>
             </div>
           </Reveal>
 
@@ -243,11 +275,11 @@ function HomePage({ onNavigate }) {
 
           <Reveal delay={0.4}>
             <div className="hero-btns">
-              <a href={CV_LINK} download className="btn-primary">
+              <a href={CV_LINK} download="Mahmoud_Ahmed_Saad_CV.pdf" className="btn-primary">
                 <Icons.Download /> Download CV
               </a>
               <button className="btn-ghost" onClick={() => onNavigate("Contact")}>
-                Contact Me <Icons.ArrowRight />
+                Get in Touch <Icons.ArrowRight />
               </button>
             </div>
           </Reveal>
@@ -280,6 +312,7 @@ function HomePage({ onNavigate }) {
     </div>
 
     <div className="home-sec"><ExperiencePage /></div>
+    <div className="home-sec"><YouTubeSection /></div>
     <div className="home-sec"><SkillsPage /></div>
     <div className="home-sec"><ContactPage /></div>
     </div>
@@ -293,9 +326,9 @@ function ExperiencePage() {
       role: "High School Mathematics Tutor · Part Time",
       loc: "Bakırköy, Istanbul", date: "Apr 2026 – Present", tag: "current",
       bullets: [
-        "Private home mathematics lessons for high school students, simplifying complex concepts.",
-        "Improve academic performance and exam readiness through structured, patient teaching.",
-        "Experienced across different levels with adaptive, student-centered approach.",
+        "Specializing in private home mathematics lessons for high school students, simplifying complex concepts.",
+        "Improving academic performance and exam readiness through structured, individual tutoring.",
+        "Highly experienced in adaptive, student-centered teaching across various math levels.",
       ],
     },
     {
@@ -329,12 +362,13 @@ function ExperiencePage() {
       ],
     },
     {
-      co: "Online Mathematics & Engineering Tutor",
-      role: "Academic Peer Tutoring · Self-Employed",
-      loc: "Remote", date: "2021 – 2025", tag: "teaching",
+      co: "Mathematics & Engineering Tutor",
+      role: "Academic Peer Tutoring · Private Lessons",
+      loc: "Istanbul (In-Home & Online)", date: "2021 – 2025", tag: "teaching",
       bullets: [
-        "Provided online mathematics tutoring to university colleagues and students.",
+        "Specializing in private in-home and online mathematics tutoring for students.",
         "Subjects: Calculus I & II, Differential Equations, Reinforced Concrete I & II.",
+        "Experienced in teaching Middle School, High School, and University levels.",
         "Recognized for clear explanations, structured delivery, and patient interaction.",
       ],
     },
@@ -392,11 +426,11 @@ function SkillsPage() {
   const services = [
     { num: "01", title: "Site Supervision",    desc: "On-site construction supervision for foundations, reinforcement, and concrete works with strict safety compliance.", tags: ["Foundations", "Concrete", "Safety"] },
     { num: "02", title: "Technical Office",     desc: "Quantity take-offs, structural drawing interpretation, documentation, and coordination between site and office.", tags: ["Take-offs", "Drawings", "Reports"] },
-    { num: "03", title: "Maths Tutoring",       desc: "Private and online tutoring in Calculus, Differential Equations, and Reinforced Concrete for university and high school students.", tags: ["Calculus", "Diff. Eq.", "RC Design"] },
-    { num: "04", title: "Engineering Software", desc: "Structural design and analysis using AutoCAD for drafting and SAP2000 for structural modeling and load analysis.", tags: ["AutoCAD", "SAP2000", "Analysis"] },
+    { num: "03", title: "Mathematics Tutoring",       desc: "Comprehensive private and online tutoring for Middle School, High School, and University students. Expert guidance in Calculus 1 & 2, Differential Equations, and Civil Engineering courses.", tags: ["Calculus 1 & 2", "Middle & High School", "University Math"] },
+    { num: "04", title: "Engineering Software", desc: "Structural design and analysis using AutoCAD for drafting and SAP2000 for structural modeling and load analysis.", tags: ["AutoCAD", "SAP2000", "Engineering Apps"] },
   ];
 
-  const tools = ["AutoCAD", "SAP2000", "Microsoft Office", "Excel", "Structural Analysis", "Quantity Take-offs", "Reinforced Concrete Design", "Foundation Design", "Site Supervision", "Technical Documentation"];
+  const tools = ["AutoCAD", "SAP2000", "Civil Engineering Software Apps", "CapCut", "Canva", "Microsoft Office", "Excel", "Structural Analysis", "Quantity Take-offs", "Reinforced Concrete Design", "Foundation Design", "Site Supervision", "Technical Documentation"];
 
   return (
     <div className="page-section">
@@ -473,17 +507,43 @@ function SkillsPage() {
 
 function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("idle"); // idle, sending, success, error
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
 
-  const submit = e => {
+  const submit = async e => {
     e.preventDefault();
-    window.location.href = `mailto:mabdelhady322@gmail.com?subject=${encodeURIComponent("Portfolio message from " + form.name)}&body=${encodeURIComponent(form.message + "\n\nReply to: " + form.email)}`;
+    setStatus("sending");
+    
+    try {
+      // Using your real Formspree ID
+      const response = await fetch("https://formspree.io/f/mlgabyab", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          _subject: `New Portfolio Message from ${form.name}`
+        })
+      });
+      
+      if (response.ok) {
+        setStatus("success");
+        setForm({ name: "", email: "", message: "" });
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      setStatus("error");
+    }
   };
 
   const contacts = [
     { icon: <Icons.Mail />,     label: "Email",            value: "mabdelhady322@gmail.com", href: "mailto:mabdelhady322@gmail.com" },
     { icon: <Icons.Phone />,    label: "Phone / WhatsApp", value: "+90 544 185 19 08",        href: "tel:+905441851908"              },
     { icon: <Icons.Linkedin />, label: "LinkedIn",         value: "View Profile →",           href: LINKEDIN_URL                     },
+    { icon: <Icons.Youtube />,  label: "YouTube",          value: "Watch Tutorials →",        href: YOUTUBE_URL                      },
     { icon: <Icons.MapPin />,   label: "Location",         value: "Istanbul, Turkey",         href: null                             },
   ];
 
@@ -532,9 +592,22 @@ function ContactPage() {
                 <textarea rows={5} placeholder="Tell me about your project or opportunity…" required
                   value={form.message} onChange={set("message")} />
               </div>
-              <button type="submit" className="btn-primary">
-                Send Message <Icons.ArrowRight />
+              <button type="submit" className="btn-primary" disabled={status !== "idle"}>
+                {status === "idle" && <><Icons.ArrowRight /> Send Message</>}
+                {status === "sending" && "Sending..."}
+                {status === "success" && "Success!"}
+                {status === "error" && "Try Again"}
               </button>
+              {status === "success" && (
+                <p style={{ color: "var(--green)", fontSize: "13px", marginTop: "12px", fontWeight: "500" }}>
+                  Thank you! Your message has been sent successfully.
+                </p>
+              )}
+              {status === "error" && (
+                <p style={{ color: "#ef4444", fontSize: "13px", marginTop: "12px", fontWeight: "500" }}>
+                  Something went wrong. Please try again or email me directly.
+                </p>
+              )}
             </form>
           </div>
         </Reveal>
@@ -618,6 +691,7 @@ export default function App() {
             <div className="footer-links">
               <a href="mailto:mabdelhady322@gmail.com" className="footer-link">Email</a>
               <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="footer-link">LinkedIn</a>
+              <a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="footer-link">YouTube</a>
               <span className="footer-loc">Istanbul, Turkey</span>
             </div>
           </div>
@@ -712,7 +786,7 @@ const css = (T) => `
   /* ─── Shared Layout inner ─── */
   .nav-inner {
     display: flex; align-items: center; justify-content: space-between;
-    width: 100%; max-width: 1080px; margin: 0 auto;
+    width: 100%; max-width: 1240px; margin: 0 auto;
   }
   
   /* ─── Navbar ─── */
@@ -786,25 +860,51 @@ const css = (T) => `
     to   { opacity: 0; transform: translateY(-10px); }
   }
 
-  /* ─── Reveal animation ─── */
-  .reveal {
-    opacity: 0; transform: translateY(28px);
-    transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
-                transform 0.75s cubic-bezier(0.22,1,0.36,1);
-  }
-  .reveal.in { opacity: 1; transform: translateY(0); }
+  /* ─── Reveal animation removed ─── */
 
   /* ─── Home page section dividers ─── */
   .home-sec { border-top: 1px solid var(--border); }
 
   /* ─── Page layouts ─── */
+  /* ─── YouTube Section ─── */
+  .section-yt { padding-top: 100px; }
+  .yt-card { padding: 48px; background: linear-gradient(135deg, rgba(20,20,23,0.9) 0%, rgba(30,30,35,0.8) 100%); }
+  .yt-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 60px; align-items: center; }
+  .yt-title { font-family: var(--display); font-size: 32px; font-weight: 800; color: var(--white); margin-bottom: 20px; }
+  .yt-desc { font-size: 17px; color: var(--muted); line-height: 1.8; margin-bottom: 30px; }
+  .yt-benefits { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+  .yt-benefit { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--white); }
+  
+  .yt-visual { position: relative; }
+  .yt-thumb {
+    width: 100%; aspect-ratio: 16/9; background: #18181b; border-radius: 16px;
+    border: 1px solid var(--border); overflow: hidden; position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
+  }
+  .yt-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center; z-index: 2;
+    transition: background 0.3s;
+  }
+  .yt-card:hover .yt-overlay { background: rgba(245,158,11,0.15); }
+  .yt-play {
+    width: 64px; height: 64px; border-radius: 50%; background: #ff0000;
+    color: white; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 30px rgba(255,0,0,0.4); transform: scale(1); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .yt-card:hover .yt-play { transform: scale(1.1); }
+  .yt-skel-line { height: 10px; background: rgba(255,255,255,0.05); border-radius: 100px; margin-top: 8px; }
+  .yt-skel-line:nth-child(1) { width: 70%; }
+  .yt-skel-line:nth-child(2) { width: 40%; }
+  .yt-skel-line:nth-child(3) { width: 90%; }
+
   .page-home {
     min-height: calc(100vh - var(--nav-h));
     display: flex; flex-direction: column;
     padding: 60px 6% 40px;
   }
   .page-section { padding: 88px 6% 108px; min-height: calc(100vh - var(--nav-h)); }
-  .section-wrap { max-width: 1080px; margin: 0 auto; width: 100%; }
+  .section-wrap { max-width: 1240px; margin: 0 auto; width: 100%; }
 
   /* ─── Section header ─── */
   .section-header { margin-bottom: 64px; }
@@ -824,9 +924,9 @@ const css = (T) => `
   /* ─── Hero ─── */
   .hero-wrap {
     flex: 1; display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 60px; align-items: center;
-    max-width: 1080px; width: 100%; margin: 0 auto;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px; align-items: center;
+    max-width: 1240px; width: 100%; margin: 0 auto;
   }
   .hero-left { display: flex; flex-direction: column; }
 
@@ -869,7 +969,7 @@ const css = (T) => `
   .role-bar  { width: 28px; height: 2px; background: var(--accent); flex-shrink: 0; }
   .role-text { font-size: 13px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
 
-  .hero-bio { font-size: 17px; color: var(--muted); line-height: 1.78; max-width: 520px; margin-top: 22px; }
+  .hero-bio { font-size: 18px; color: var(--muted); line-height: 1.8; max-width: 620px; margin-top: 24px; }
   .bio-hl { color: var(--white); font-weight: 500; }
 
   .hero-btns { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
@@ -881,9 +981,13 @@ const css = (T) => `
     transition: all 0.3s cubic-bezier(0.2,0.8,0.2,1);
     font-family: var(--sans); text-decoration: none; letter-spacing: 0.01em;
   }
-  .btn-primary:hover {
+  .btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 16px 40px var(--glow), 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .btn-primary:disabled {
+    opacity: 0.6; cursor: not-allowed; transform: none;
+    background: var(--dim);
   }
   .btn-ghost {
     padding: 14px 30px; background: transparent; color: var(--white);
@@ -915,7 +1019,7 @@ const css = (T) => `
 
   /* ─── Hero visual / blueprint ─── */
   .hero-right { display: flex; align-items: center; justify-content: center; }
-  .hero-visual { position: relative; width: 100%; max-width: 440px; }
+  .hero-visual { position: relative; width: 100%; max-width: 520px; }
   .bp-frame { position: relative; width: 100%; aspect-ratio: 1; }
   .bp-svg {
     width: 100%; height: 100%; color: var(--accent);
@@ -1010,10 +1114,10 @@ const css = (T) => `
   .tl-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
   .tl-title-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .tl-co { font-size: 18px; font-weight: 700; color: var(--white); font-family: var(--display); }
-  .tl-meta { text-align: right; }
-  .tl-loc  { display: block; font-size: 13px; color: var(--muted); }
-  .tl-date { display: block; font-size: 12px; color: var(--dim); margin-top: 3px; font-weight: 500; }
-  .tl-role { font-size: 14px; color: var(--accent); margin-top: 8px; font-weight: 500; }
+  .tl-meta { text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
+  .tl-loc  { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .tl-date { font-size: 12px; color: var(--dim); margin-top: 4px; font-weight: 600; }
+  .tl-role { font-size: 14px; color: var(--accent); margin-top: 10px; font-weight: 600; letter-spacing: 0.01em; }
   .tl-bullets { list-style: none; margin-top: 18px; display: flex; flex-direction: column; gap: 11px; }
   .tl-bullets li { display: flex; align-items: flex-start; gap: 11px; }
   .check-icon { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
@@ -1033,16 +1137,17 @@ const css = (T) => `
   .chip-row-dense { margin-top: 16px; }
 
   /* ─── Skills / Services ─── */
-  .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .svc-card { display: flex; flex-direction: column; height: 100%; padding: 32px; }
-  .svc-num   { font-family: var(--display); font-size: 38px; font-weight: 800; color: var(--accent); opacity: 0.45; line-height: 1; }
-  .svc-title { font-size: 18px; font-weight: 700; color: var(--white); margin-top: 16px; font-family: var(--display); }
-  .svc-desc  { font-size: 14px; color: var(--muted); line-height: 1.72; margin-top: 10px; flex: 1; }
+  .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .svc-card { display: flex; flex-direction: column; height: 100%; padding: 40px; }
+  .svc-num   { font-family: var(--display); font-size: 42px; font-weight: 900; color: var(--accent); opacity: 0.35; line-height: 1; letter-spacing: -0.05em; }
+  .svc-title { font-size: 20px; font-weight: 700; color: var(--white); margin-top: 12px; font-family: var(--display); }
+  .svc-desc  { font-size: 14px; color: var(--muted); line-height: 1.75; margin-top: 12px; flex: 1; }
   .tools-card { padding: 32px; margin-top: 20px; }
 
   /* Education / languages */
-  .edu-lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-  .edu-card, .lang-card { padding: 32px; }
+  .edu-lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; align-items: stretch; }
+  .edu-card, .lang-card { padding: 32px; display: flex; flex-direction: column; height: 100%; }
+  .lang-card .lang-list { flex: 1; display: flex; flex-direction: column; justify-content: center; }
   .edu-degree { font-size: 18px; font-weight: 700; color: var(--white); margin-top: 16px; font-family: var(--display); }
   .edu-school { font-size: 14px; color: var(--muted); margin-top: 6px; }
   .edu-date   { font-size: 12px; color: var(--dim); margin-top: 8px; font-weight: 500; }
@@ -1061,8 +1166,8 @@ const css = (T) => `
   .vol-date  { font-size: 12px; color: var(--dim); font-weight: 500; white-space: nowrap; margin-left: 24px; flex-shrink: 0; }
 
   /* ─── Contact ─── */
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-  .contact-card { display: flex; align-items: flex-start; gap: 16px; padding: 22px 24px; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  .contact-card { display: flex; align-items: flex-start; gap: 20px; padding: 28px; }
   .contact-icon-wrap {
     width: 42px; height: 42px; border-radius: 13px;
     background: var(--soft); border: 1px solid rgba(245,158,11,0.2);
@@ -1177,7 +1282,9 @@ const css = (T) => `
   .footer-loc   { font-size: 12px; color: var(--dim); }
 
   /* ─── Responsive ─── */
-  @media (max-width: 960px) {
+  @media (max-width: 1024px) {
+    .nav-inner { max-width: 90%; }
+    .section-wrap { max-width: 90%; }
     .hero-wrap { grid-template-columns: 1fr; gap: 40px; }
     .hero-right { display: none; }
     .svc-grid { grid-template-columns: 1fr; }
@@ -1195,6 +1302,8 @@ const css = (T) => `
     .hero-stats   { gap: 0; }
     .stat-cell    { padding-right: 16px; }
     .stat-num     { font-size: 34px; }
+    .yt-grid      { grid-template-columns: 1fr; gap: 32px; }
+    .yt-card      { padding: 32px 24px; }
     .contact-grid { grid-template-columns: 1fr; }
     .form-row     { grid-template-columns: 1fr; }
     .tl-meta      { text-align: left; }
