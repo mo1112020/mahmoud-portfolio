@@ -96,6 +96,24 @@ function AmbientBackground() {
 }
 
 function HeroVisual() {
+  const [msgIdx, setMsgIdx] = useState(0);
+  const msgs = [
+    "Welcome to my portfolio!",
+    "How can I help you today?",
+    "Need an engineering tutor?",
+    "Building things is my passion!",
+    "Let's create something great!",
+    "Check out my YouTube channel!",
+    "Success starts with a plan.",
+    "Calculus 1 & 2 are my specialty!",
+    "Solving problems, one at a time.",
+    "Ready for our next project?",
+    "Innovation in every design.",
+    "Welcome! Click me for more!",
+  ];
+
+  const nextMsg = () => setMsgIdx((i) => (i + 1) % msgs.length);
+
   return (
     <div className="hero-visual" aria-hidden="true">
       <div className="bp-frame">
@@ -130,11 +148,11 @@ function HeroVisual() {
           <circle cx="151" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
           <circle cx="249" cy="249" r="2.5" fill="currentColor" opacity="0.3"/>
         </svg>
-        <div className="char-wrap">
+        <div className="char-wrap" onMouseEnter={nextMsg} onClick={nextMsg} style={{ cursor: "pointer" }}>
           <div className="char-circle">
             <img src={charImg} alt="Welcome" className="hero-char" />
           </div>
-          <div className="welcome-bubble">Welcome!</div>
+          <div className="welcome-bubble">{msgs[msgIdx]}</div>
         </div>
         <div className="float-tag ft-tl">AutoCAD</div>
         <div className="float-tag ft-tr">SAP2000</div>
@@ -1044,12 +1062,14 @@ const css = (T) => `
   .hero-char { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }
   
   .welcome-bubble {
-    position: absolute; top: -15px; right: -45px;
+    position: absolute; top: -15px; left: 100%;
+    transform: none; white-space: nowrap;
     background: var(--accent); color: var(--bg);
     padding: 8px 16px; border-radius: 16px 16px 16px 0;
     font-weight: 800; font-size: 14px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     animation: float-bubble 3s ease-in-out infinite;
+    z-index: 20;
   }
   @keyframes float-bubble {
     0%, 100% { transform: translateY(0) rotate(5deg); }
