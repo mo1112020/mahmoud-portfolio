@@ -114,6 +114,11 @@ function HeroVisual() {
 
   const nextMsg = () => setMsgIdx((i) => (i + 1) % msgs.length);
 
+  useEffect(() => {
+    const t = setInterval(nextMsg, 5000);
+    return () => clearInterval(t);
+  }, []);
+
   return (
     <div className="hero-visual" aria-hidden="true">
       <div className="bp-frame">
