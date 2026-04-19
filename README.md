@@ -77,7 +77,7 @@ The app will be available at `http://localhost:5173`.
 npm run build
 ```
 
-Output will be in the `dist/` folder, ready to deploy to Vercel, Netlify, or GitHub Pages.
+Output will be in the `dist/` folder, ready to deploy to Netlify or GitHub Pages.
 
 ---
 
