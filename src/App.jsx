@@ -37,6 +37,68 @@ const Icons = {
   Youtube: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z" /><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" /></svg>,
 };
 
+// ─── Three.js Wireframe Building ─────────────────────────────────────────────
+
+function WireframeBuilding() {
+  const groupRef = useRef();
+  const scanRef = useRef();
+
+  const towerEdges = useMemo(
+    () => new THREE.EdgesGeometry(new THREE.BoxGeometry(1.2, 3, 1.2)),
+    []
+  );
+  const floorEdges = useMemo(
+    () => new THREE.EdgesGeometry(new THREE.BoxGeometry(1.2, 0.01, 1.2)),
+    []
+  );
+  const floorY = useMemo(() => [-0.9, -0.3, 0.3, 0.9], []);
+  const joints = useMemo(() => [
+    [-0.6, -1.5, -0.6], [0.6, -1.5, -0.6], [-0.6, -1.5, 0.6], [0.6, -1.5, 0.6],
+    [-0.6,  1.5, -0.6], [0.6,  1.5, -0.6], [-0.6,  1.5, 0.6], [0.6,  1.5, 0.6],
+  ], []);
+
+  useFrame(({ clock }) => {
+    if (groupRef.current) groupRef.current.rotation.y += 0.003;
+    if (scanRef.current)
+      scanRef.current.position.y = Math.sin(clock.elapsedTime * 0.8) * 1.5;
+  });
+
+  return (
+    <group ref={groupRef}>
+      <lineSegments geometry={towerEdges}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+
+      {floorY.map((y, i) => (
+        <lineSegments key={i} geometry={floorEdges} position={[0, y, 0]}>
+          <lineBasicMaterial color="#57534e" transparent opacity={0.7} />
+        </lineSegments>
+      ))}
+
+      {joints.map(([x, y, z], i) => (
+        <mesh key={i} position={[x, y, z]}>
+          <sphereGeometry args={[0.05, 8, 8]} />
+          <meshStandardMaterial
+            color="#10b981"
+            emissive="#10b981"
+            emissiveIntensity={1.5}
+          />
+        </mesh>
+      ))}
+
+      <mesh ref={scanRef}>
+        <planeGeometry args={[1.4, 0.02]} />
+        <meshBasicMaterial
+          color="#10b981"
+          transparent
+          opacity={0.5}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 // ─── Shared Components ────────────────────────────────────────────────────────
 
 function ScrollProgress() {
