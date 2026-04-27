@@ -1,0 +1,62 @@
+<h2>How should we make the hero character 3D?</h2>
+<p class="subtitle">Each approach has different effort, realism, and dependency cost. Pick the one that fits your vision.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="spline" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #1c1917 0%, #3b3330 100%); display:flex; align-items:center; justify-content:center; height:160px; border-radius:10px; margin-bottom:12px; position:relative; overflow:hidden;">
+      <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(145deg,#f5f5f4,#d6d3d1);box-shadow:8px 12px 24px rgba(0,0,0,0.5),-4px -4px 16px rgba(255,255,255,0.15);position:relative;">
+        <div style="position:absolute;top:20%;left:25%;width:20%;height:20%;border-radius:50%;background:#78716c;box-shadow:2px 2px 6px rgba(0,0,0,0.4);"></div>
+        <div style="position:absolute;top:20%;right:25%;width:20%;height:20%;border-radius:50%;background:#78716c;box-shadow:2px 2px 6px rgba(0,0,0,0.4);"></div>
+        <div style="position:absolute;bottom:25%;left:50%;transform:translateX(-50%);width:35%;height:12%;border-radius:20px;background:#a8a29e;"></div>
+      </div>
+      <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:3px 8px;font-size:11px;color:#fff;font-weight:600;">Spline</div>
+    </div>
+    <div class="card-body">
+      <h3>Spline Embed (Recommended)</h3>
+      <p>Design a 3D character in Spline (free, browser-based), then embed it with one small React package. Gets real-time lighting, rotation on hover, and idle animations — no 3D modeling expertise needed.</p>
+      <div style="margin-top:12px;">
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Easy setup</span>
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Great visuals</span>
+        <span style="display:inline-block;background:#fef3c7;color:#92400e;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Needs design work in Spline</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="three" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); display:flex; align-items:center; justify-content:center; height:160px; border-radius:10px; margin-bottom:12px; position:relative; overflow:hidden;">
+      <div style="width:90px;height:90px;border-radius:8px;background:linear-gradient(145deg,#6366f1,#8b5cf6);box-shadow:10px 14px 28px rgba(0,0,0,0.6),inset -4px -4px 12px rgba(0,0,0,0.3);transform:rotate(15deg) perspective(200px) rotateX(10deg);"></div>
+      <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:3px 8px;font-size:11px;color:#fff;font-weight:600;">Three.js</div>
+    </div>
+    <div class="card-body">
+      <h3>React Three Fiber</h3>
+      <p>Full 3D via Three.js + React Three Fiber. Can load a GLTF/GLB character model (free ones on Sketchfab / Mixamo). Most powerful — orbital controls, custom animations, realistic materials — but needs a 3D model file.</p>
+      <div style="margin-top:12px;">
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Most powerful</span>
+        <span style="display:inline-block;background:#fef3c7;color:#92400e;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Needs GLTF model</span>
+        <span style="display:inline-block;background:#fee2e2;color:#991b1b;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Higher complexity</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="css3d" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #1c1917 0%, #292524 100%); display:flex; align-items:center; justify-content:center; height:160px; border-radius:10px; margin-bottom:12px; position:relative; overflow:hidden;">
+      <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(145deg,#f5f4f0,#e7e5e4);box-shadow:12px 16px 32px rgba(0,0,0,0.5),-6px -6px 20px rgba(255,255,255,0.2),inset -8px -8px 16px rgba(0,0,0,0.08);position:relative;transform:perspective(300px) rotateY(15deg);">
+        <div style="position:absolute;top:15%;left:22%;width:22%;height:22%;border-radius:50%;background:#57534e;box-shadow:3px 3px 8px rgba(0,0,0,0.3);"></div>
+        <div style="position:absolute;top:15%;right:22%;width:22%;height:22%;border-radius:50%;background:#57534e;box-shadow:3px 3px 8px rgba(0,0,0,0.3);"></div>
+        <div style="position:absolute;bottom:20%;left:50%;transform:translateX(-50%);width:38%;height:14%;border-radius:20px;background:#a8a29e;"></div>
+      </div>
+      <div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:3px 8px;font-size:11px;color:#fff;font-weight:600;">CSS</div>
+    </div>
+    <div class="card-body">
+      <h3>CSS 3D Illusion (Lightweight)</h3>
+      <p>Use CSS <code>perspective</code>, gradients, and shadows to make the existing 2D character PNG look 3D. Add mouse-parallax so it tilts toward the cursor. Zero new dependencies — but it's a visual trick, not true 3D.</p>
+      <div style="margin-top:12px;">
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">No dependencies</span>
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Fast to build</span>
+        <span style="display:inline-block;background:#fef3c7;color:#92400e;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Not true 3D</span>
+      </div>
+    </div>
+  </div>
+
+</div>

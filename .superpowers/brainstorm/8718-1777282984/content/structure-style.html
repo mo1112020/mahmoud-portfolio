@@ -1,0 +1,118 @@
+<h2>What style should the 3D structural element have?</h2>
+<p class="subtitle">All three rotate slowly and react to mouse hover. Pick the aesthetic that fits your portfolio best.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="wireframe" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#1c1917;border-radius:10px;height:180px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;position:relative;">
+      <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.9">
+        <!-- Wireframe building -->
+        <rect x="40" y="40" width="60" height="80" stroke="#a8a29e" stroke-width="1" fill="none"/>
+        <rect x="48" y="40" width="44" height="80" stroke="#78716c" stroke-width="0.5" fill="none"/>
+        <!-- floors -->
+        <line x1="40" y1="60" x2="100" y2="60" stroke="#a8a29e" stroke-width="0.5"/>
+        <line x1="40" y1="80" x2="100" y2="80" stroke="#a8a29e" stroke-width="0.5"/>
+        <line x1="40" y1="100" x2="100" y2="100" stroke="#a8a29e" stroke-width="0.5"/>
+        <!-- 3D depth lines -->
+        <line x1="40" y1="40" x2="28" y2="28" stroke="#78716c" stroke-width="0.7"/>
+        <line x1="100" y1="40" x2="112" y2="28" stroke="#78716c" stroke-width="0.7"/>
+        <line x1="100" y1="120" x2="112" y2="108" stroke="#78716c" stroke-width="0.7"/>
+        <rect x="28" y="28" width="84" height="80" stroke="#57534e" stroke-width="0.7" fill="none"/>
+        <!-- glowing corner dots -->
+        <circle cx="40" cy="40" r="2" fill="#d4a373" opacity="0.8"/>
+        <circle cx="100" cy="40" r="2" fill="#d4a373" opacity="0.8"/>
+        <circle cx="40" cy="120" r="2" fill="#d4a373" opacity="0.8"/>
+        <circle cx="100" cy="120" r="2" fill="#d4a373" opacity="0.8"/>
+        <!-- horizontal scan line -->
+        <line x1="20" y1="70" x2="120" y2="70" stroke="#10b981" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+      <div style="position:absolute;top:8px;right:8px;background:rgba(168,162,158,0.15);border:1px solid rgba(168,162,158,0.3);border-radius:6px;padding:3px 8px;font-size:11px;color:#a8a29e;font-weight:600;letter-spacing:0.08em;">WIREFRAME</div>
+    </div>
+    <div class="card-body">
+      <h3>Wireframe Structure</h3>
+      <p>A hollow wireframe building or truss — edges only, no fill. Matches blueprint aesthetic perfectly. Subtle green scan line sweeps through it. Minimal, technical, and fast to render.</p>
+      <div style="margin-top:10px;">
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Best performance</span>
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Blueprint feel</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="solid" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#1c1917;border-radius:10px;height:180px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;position:relative;">
+      <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Solid building with shading -->
+        <!-- front face -->
+        <rect x="40" y="45" width="55" height="75" fill="#292524"/>
+        <rect x="40" y="45" width="55" height="75" stroke="#57534e" stroke-width="1" fill="none"/>
+        <!-- side face (lighter) -->
+        <polygon points="95,45 110,32 110,107 95,120" fill="#3d3835" stroke="#57534e" stroke-width="0.8"/>
+        <!-- top face -->
+        <polygon points="40,45 55,32 110,32 95,45" fill="#4a4440" stroke="#57534e" stroke-width="0.8"/>
+        <!-- windows -->
+        <rect x="48" y="55" width="12" height="14" fill="#78716c" opacity="0.6"/>
+        <rect x="66" y="55" width="12" height="14" fill="#78716c" opacity="0.6"/>
+        <rect x="48" y="78" width="12" height="14" fill="#a8a29e" opacity="0.5"/>
+        <rect x="66" y="78" width="12" height="14" fill="#a8a29e" opacity="0.5"/>
+        <!-- highlight -->
+        <line x1="40" y1="45" x2="40" y2="120" stroke="#a8a29e" stroke-width="1.5" opacity="0.3"/>
+      </svg>
+      <div style="position:absolute;top:8px;right:8px;background:rgba(168,162,158,0.15);border:1px solid rgba(168,162,158,0.3);border-radius:6px;padding:3px 8px;font-size:11px;color:#a8a29e;font-weight:600;letter-spacing:0.08em;">SOLID</div>
+    </div>
+    <div class="card-body">
+      <h3>Solid Low-Poly Building</h3>
+      <p>A low-polygon 3D building with flat shading — visible faces with subtle lighting. Looks modern and architectural. Rotates gently. More visually substantial than wireframe.</p>
+      <div style="margin-top:10px;">
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Modern look</span>
+        <span style="display:inline-block;background:#fef3c7;color:#92400e;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Slightly heavier</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="truss" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#1c1917;border-radius:10px;height:180px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;overflow:hidden;position:relative;">
+      <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Structural truss / bridge frame -->
+        <!-- bottom chord -->
+        <line x1="20" y1="100" x2="120" y2="100" stroke="#a8a29e" stroke-width="2"/>
+        <!-- top chord -->
+        <line x1="30" y1="50" x2="110" y2="50" stroke="#a8a29e" stroke-width="2"/>
+        <!-- verticals -->
+        <line x1="45" y1="50" x2="45" y2="100" stroke="#78716c" stroke-width="1.2"/>
+        <line x1="70" y1="50" x2="70" y2="100" stroke="#78716c" stroke-width="1.2"/>
+        <line x1="95" y1="50" x2="95" y2="100" stroke="#78716c" stroke-width="1.2"/>
+        <!-- diagonals -->
+        <line x1="20" y1="100" x2="45" y2="50" stroke="#57534e" stroke-width="1"/>
+        <line x1="45" y1="100" x2="70" y2="50" stroke="#57534e" stroke-width="1"/>
+        <line x1="70" y1="100" x2="95" y2="50" stroke="#57534e" stroke-width="1"/>
+        <line x1="95" y1="100" x2="120" y2="50" stroke="#57534e" stroke-width="1"/>
+        <!-- counter diagonals -->
+        <line x1="45" y1="100" x2="30" y2="50" stroke="#3d3835" stroke-width="0.7"/>
+        <line x1="70" y1="100" x2="45" y2="50" stroke="#3d3835" stroke-width="0.7"/>
+        <!-- 3d depth -->
+        <line x1="20" y1="100" x2="14" y2="92" stroke="#57534e" stroke-width="0.8"/>
+        <line x1="120" y1="100" x2="126" y2="92" stroke="#57534e" stroke-width="0.8"/>
+        <line x1="30" y1="50" x2="24" y2="42" stroke="#57534e" stroke-width="0.8"/>
+        <line x1="110" y1="50" x2="116" y2="42" stroke="#57534e" stroke-width="0.8"/>
+        <!-- joint dots -->
+        <circle cx="45" cy="50" r="3" fill="#d4a373" opacity="0.7"/>
+        <circle cx="70" cy="50" r="3" fill="#d4a373" opacity="0.7"/>
+        <circle cx="95" cy="50" r="3" fill="#d4a373" opacity="0.7"/>
+        <circle cx="45" cy="100" r="3" fill="#d4a373" opacity="0.7"/>
+        <circle cx="70" cy="100" r="3" fill="#d4a373" opacity="0.7"/>
+        <circle cx="95" cy="100" r="3" fill="#d4a373" opacity="0.7"/>
+      </svg>
+      <div style="position:absolute;top:8px;right:8px;background:rgba(168,162,158,0.15);border:1px solid rgba(168,162,158,0.3);border-radius:6px;padding:3px 8px;font-size:11px;color:#a8a29e;font-weight:600;letter-spacing:0.08em;">TRUSS</div>
+    </div>
+    <div class="card-body">
+      <h3>3D Structural Truss / Frame</h3>
+      <p>A Pratt truss or space frame — the actual structure civil engineers design. Glowing joint nodes, rotating on all axes. Most unique and on-brand for a structural engineer portfolio.</p>
+      <div style="margin-top:10px;">
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Most on-brand</span>
+        <span style="display:inline-block;background:#d1fae5;color:#065f46;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Unique</span>
+        <span style="display:inline-block;background:#fef3c7;color:#92400e;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;margin:2px;">Custom geometry needed</span>
+      </div>
+    </div>
+  </div>
+
+</div>
