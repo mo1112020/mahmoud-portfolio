@@ -233,9 +233,10 @@ function HeroVisual() {
         }}
       >
         <Canvas
+          className="bp-canvas"
           gl={{ alpha: true }}
           camera={{ position: [0, 0.5, 4], fov: 45 }}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%" }}
         >
           <ambientLight intensity={0.4} />
           <pointLight position={[2, 4, 2]} intensity={1.0} />
