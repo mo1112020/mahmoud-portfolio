@@ -175,6 +175,9 @@ function SkillsMarquee() {
 function HeroVisual() {
   const [msgIdx, setMsgIdx] = useState(0);
   const [isTalking, setIsTalking] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const frameRef = useRef(null);
+
   const msgs = [
     "Welcome to my portfolio!",
     "How can I help you today?",
@@ -201,30 +204,49 @@ function HeroVisual() {
     return () => clearInterval(t);
   }, []);
 
+  const handleMouseMove = useCallback((e) => {
+    const el = frameRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = Math.max(-8, Math.min(8, ((e.clientX - cx) / (rect.width / 2)) * 8));
+    const dy = Math.max(-8, Math.min(8, ((e.clientY - cy) / (rect.height / 2)) * -8));
+    setTilt({ x: dy, y: dx });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => setTilt({ x: 0, y: 0 }), []);
+
   return (
-    <div className="hero-visual" aria-hidden="true">
-      <div className="bp-frame">
-        <svg className="bp-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="5" width="390" height="390" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 6" opacity="0.1" />
+    <div
+      className="hero-visual"
+      aria-hidden="true"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div
+        className="bp-frame"
+        ref={frameRef}
+        style={{
+          transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          transition: "transform 0.1s ease-out",
+        }}
+      >
+        <Canvas
+          gl={{ alpha: true }}
+          camera={{ position: [0, 0.5, 4], fov: 45 }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+        >
+          <ambientLight intensity={0.4} />
+          <pointLight position={[2, 4, 2]} intensity={1.0} />
+          <WireframeBuilding />
+        </Canvas>
 
-          <line x1="200" y1="5" x2="200" y2="395" stroke="currentColor" strokeWidth="0.5" opacity="0.1" />
-          <line x1="5" y1="200" x2="395" y2="200" stroke="currentColor" strokeWidth="0.5" opacity="0.1" />
-
-          <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="0.5" opacity="0.08" />
-          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 4" opacity="0.12" />
-          <circle cx="200" cy="200" r="100" stroke="currentColor" strokeWidth="1" opacity="0.15" />
-
-          <g opacity="0.2">
-            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map(deg => (
-              <line key={deg} x1="200" y1="20" x2="200" y2="35" stroke="currentColor" strokeWidth="1.5"
-                transform={`rotate(${deg}, 200, 200)`} />
-            ))}
-          </g>
-
-          <circle cx="200" cy="200" r="15" fill="currentColor" opacity="0.1" />
-        </svg>
-
-        <div className={`char-wrap ${isTalking ? "is-talking" : ""}`} onClick={nextMsg} style={{ cursor: "pointer" }}>
+        <div
+          className={`char-wrap ${isTalking ? "is-talking" : ""}`}
+          onClick={nextMsg}
+          style={{ cursor: "pointer" }}
+        >
           <div className="char-circle">
             <div className="char-glow" />
             <img src={charImg} alt="Welcome" className="hero-char" />
@@ -1162,6 +1184,7 @@ const css = (T) => `
     animation: heroFloat 6s ease-in-out infinite;
   }
   .bp-frame { position: relative; width: 100%; aspect-ratio: 1; }
+  .bp-canvas { position: absolute; inset: 0; }
   
   .hero-head {
     font-family: var(--display);
