@@ -1276,7 +1276,7 @@ const css = (T) => `
     height: calc(100% - 44px); width: 1px;
     background: linear-gradient(to bottom, var(--accent), rgba(245,158,11,0.08), transparent);
   }
-  .tl-item { position: relative; }
+  .tl-item { position: relative; animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .tl-dot {
     position: absolute; left: -36px; top: 24px;
     width: 13px; height: 13px; border-radius: 50%;
@@ -1320,8 +1320,8 @@ const css = (T) => `
   .chip-row-dense { margin-top: 16px; }
 
   /* ─── Skills / Services ─── */
-  .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .svc-card { display: flex; flex-direction: column; height: 100%; padding: 40px; }
+  .svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+  .svc-card { display: flex; flex-direction: column; height: 100%; padding: 40px; animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .svc-num   { font-family: var(--display); font-size: 42px; font-weight: 900; color: var(--accent); opacity: 0.35; line-height: 1; letter-spacing: -0.05em; }
   .svc-title { font-size: 20px; font-weight: 700; color: var(--white); margin-top: 12px; font-family: var(--display); }
   .svc-desc  { font-size: 14px; color: var(--muted); line-height: 1.75; margin-top: 12px; flex: 1; }
@@ -1350,7 +1350,7 @@ const css = (T) => `
 
   /* ─── Contact ─── */
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
-  .contact-card { display: flex; align-items: flex-start; gap: 20px; padding: 28px; }
+  .contact-card { display: flex; align-items: flex-start; gap: 20px; padding: 28px; animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .contact-icon-wrap {
     width: 42px; height: 42px; border-radius: 13px;
     background: var(--soft); border: 1px solid rgba(245,158,11,0.2);
@@ -1810,6 +1810,10 @@ const css = (T) => `
       opacity: 1;
       transform: translateY(0);
     }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes heroFadeIn {
     from { opacity: 0; }
