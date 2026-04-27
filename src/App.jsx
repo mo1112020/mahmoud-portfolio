@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import ReactDOM from "react-dom";
+import { Canvas, useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 import charImg from "./assets/character.png";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/eng-mahmoud-saad-635185249/";
-const YOUTUBE_URL = "https://www.youtube.com/@mahmoudabdelhady6253";
+const YOUTUBE_URL = "https://www.youtube.com/@mahmoudabdelhady6253/playlists";
 
 const T = {
   bg: "#f5f4f0",
