@@ -816,21 +816,6 @@ const css = (T) => `
     -webkit-font-smoothing: antialiased;
   }
 
-  .ambient-bg {
-  }
-  .dot-grid {
-    position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px);
-    background-size: 34px 34px;
-    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
-    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
-  }
-  @keyframes orbFloat {
-    0%   { transform: translate(0,0) scale(1); }
-    50%  { transform: translate(-4%,6%) scale(1.06); }
-    100% { transform: translate(5%,-4%) scale(0.96); }
-  }
-
   /* ─── Cursor glow ─── */
   .cursor-glow {
     position: fixed; width: 600px; height: 600px; border-radius: 50%;
@@ -1048,23 +1033,6 @@ const css = (T) => `
   }
   .hero-btns { display: flex; align-items: center; gap: 14px; margin-top: 30px; }
 
-  .status-pill {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 8px 18px; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 100px;
-    font-size: 13px; color: var(--white); font-weight: 500;
-    width: fit-content; backdrop-filter: blur(10px);
-  }
-  .status-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--green); flex-shrink: 0;
-    animation: statusPulse 2.4s ease-in-out infinite;
-  }
-  @keyframes statusPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
-    50%       { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
-  }
-
   .btn-primary {
     padding: 14px 30px; background: var(--accent); color: var(--bg);
     border: none; border-radius: 100px; font-size: 14px; font-weight: 700;
@@ -1272,13 +1240,6 @@ const css = (T) => `
     50%      { transform: translateY(-8px) rotate(8deg); }
   }
 
-  .bp-svg {
-    width: 100%; height: 100%; color: var(--accent);
-    animation: bpSpin 120s linear infinite;
-    filter: drop-shadow(0 0 20px rgba(0,0,0,0.02));
-  }
-  @keyframes bpSpin { to { transform: rotate(360deg); } }
-
   .float-tag {
     position: absolute; background: #1c1917;
     border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
@@ -1293,23 +1254,6 @@ const css = (T) => `
   .ft-bl { bottom: 22%; left: -9%; animation: ftBob 4.4s ease-in-out infinite alternate; animation-delay: -1.2s; }
   .ft-br { bottom: 17%; right: -5%; animation: ftBob 5.8s ease-in-out infinite alternate-reverse; animation-delay: -2.4s; }
   @keyframes ftBob { from { transform: translateY(0); } to { transform: translateY(-12px); } }
-
-  .hero-bg-word {
-    position: absolute; bottom: -8%; right: -14%;
-    font-family: var(--display); font-size: clamp(48px, 8vw, 96px);
-    font-weight: 900; letter-spacing: -0.07em;
-    color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.045);
-    user-select: none; pointer-events: none; z-index: -1; white-space: nowrap;
-  }
-
-  /* Scroll cue */
-  .scroll-cue {
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    padding: 32px 0 8px; margin-top: auto; opacity: 0.45;
-  }
-  .scroll-cue-text { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
-  .scroll-cue-icon { color: var(--accent); animation: scrollBounce 2.3s ease-in-out infinite; }
-  @keyframes scrollBounce { 0%, 100% { transform: translateY(0); } 55% { transform: translateY(7px); } }
 
   /* ─── Cards ─── */
   .card {
