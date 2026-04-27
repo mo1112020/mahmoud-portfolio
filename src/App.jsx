@@ -1065,20 +1065,6 @@ const css = (T) => `
     50%       { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
   }
 
-  .hero-stats {
-    display: flex; margin-top: 60px; padding-top: 48px;
-    border-top: 1px solid var(--border);
-  }
-  .stat-cell {
-    flex: 1; display: flex; flex-direction: column; gap: 4px;
-    padding-right: 48px;
-  }
-  .stat-num {
-    font-family: var(--display); font-size: 48px; font-weight: 400;
-    color: var(--accent); line-height: 1; letter-spacing: -0.02em;
-  }
-  .stat-lbl { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
-
   .btn-primary {
     padding: 14px 30px; background: var(--accent); color: var(--bg);
     border: none; border-radius: 100px; font-size: 14px; font-weight: 700;
@@ -1103,25 +1089,6 @@ const css = (T) => `
   }
   .btn-ghost:hover { background: var(--surface-hov); border-color: var(--border-hov); transform: translateY(-1px); }
 
-  /* Stats */
-  .hero-stats {
-    display: flex; margin-top: 48px; padding-top: 36px;
-    border-top: 1px solid var(--border);
-  }
-  .stat-cell {
-    flex: 1; display: flex; flex-direction: column; gap: 6px;
-    padding-right: 32px; position: relative;
-  }
-  .stat-cell:not(:last-child)::after {
-    content: ''; position: absolute; right: 16px; top: 4px; bottom: 4px;
-    width: 1px; background: var(--border);
-  }
-  .stat-num {
-    font-family: var(--display); font-size: 44px; font-weight: 800;
-    color: var(--white); line-height: 1; letter-spacing: -0.03em;
-  }
-  .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
-
   /* ─── Hero visual / blueprint ─── */
   .hero-right {
     display: flex;
@@ -1141,34 +1108,6 @@ const css = (T) => `
   .bp-frame { position: relative; width: 100%; aspect-ratio: 1; }
   .bp-canvas { position: absolute; inset: 0; }
   
-  .hero-head {
-    font-family: var(--display);
-    font-size: clamp(38px, 6vw, 72px);
-    line-height: 1.1; color: var(--white);
-    margin-bottom: 24px;
-  }
-  .hh-line { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
-  .hh-line b { font-weight: 500; letter-spacing: -0.02em; }
-  .hh-line i { font-family: var(--display); font-style: italic; font-weight: 300; color: var(--dim); }
-  
-  .pill-img {
-    display: inline-flex; width: clamp(44px, 8vw, 88px); height: clamp(28px, 4vw, 44px);
-    border-radius: 100px; overflow: hidden; background: #fff;
-    border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-  }
-  .pill-img img { width: 100%; height: 100%; object-fit: cover; }
-  .pill-ico {
-    display: inline-flex; width: 44px; height: 44px;
-    background: #fff; border: 1px solid var(--border); border-radius: 50%;
-    align-items: center; justify-content: center; font-size: 18px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-  }
-
-  .btn-capsule {
-    padding: 20px 52px; border-radius: 100px; background: #1c1917; color: #fff;
-    font-weight: 600; font-size: 16px; border: none;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  }
   .ambient-bg {
     position: fixed; inset: 0; z-index: -1;
     background: #f5f4f0;
@@ -1252,24 +1191,9 @@ const css = (T) => `
     50% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(16,185,129,0.10), 0 0 20px rgba(16,185,129,0.65); }
   }
 
-  .hero-head {
-    font-size: clamp(38px, 4.8vw, 66px);
-    line-height: 1.04;
-    letter-spacing: -0.035em;
-    margin-bottom: 4px;
-    font-family: var(--display);
-    color: #1c1917;
-    animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: 0.08s;
-  }
   .hh-line { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
   .hh-line i { font-style: normal; font-weight: 500; color: #292524; }
-  .hh-line b { font-weight: 800; color: #1c1917; }
-  .pill-img { 
-    height: clamp(28px, 3.5vw, 42px); aspect-ratio: 1.8; 
-    border-radius: 100px; overflow: hidden; border: 1px solid var(--border);
-    background: #fff; transform: rotate(-1deg); box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  }
+  .hh-line b { font-weight: 800; color: #1c1917; letter-spacing: -0.02em; }
   .btn-capsule {
     padding: 16px 34px; font-size: 14px; font-weight: 600;
     background: #1c1917; color: #fff;
@@ -1292,13 +1216,6 @@ const css = (T) => `
   .btn-capsule:hover svg {
     transform: translateX(3px);
   }
-  .pill-img img { width: 100%; height: 100%; object-fit: cover; }
-  .pill-ico {
-    padding: 6px 16px; background: #fff; border: 1px solid var(--border);
-    border-radius: 100px; font-size: 18px; transform: rotate(2deg);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  }
-
   .char-wrap {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
@@ -1741,9 +1658,14 @@ const css = (T) => `
     gap: 2px;
   }
   .hero-head {
-    margin-bottom: 8px;
+    font-family: var(--display);
     font-size: clamp(34px, 4vw, 56px);
     line-height: 1.02;
+    letter-spacing: -0.035em;
+    margin-bottom: 8px;
+    color: #1c1917;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.08s;
   }
   .hero-eyebrow {
     margin-bottom: 14px;
