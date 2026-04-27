@@ -819,7 +819,7 @@ const css = (T) => `
   /* ─── Cursor glow ─── */
   .cursor-glow {
     position: fixed; width: 600px; height: 600px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(28,25,23,0.04) 0%, transparent 70%);
     pointer-events: none; z-index: 1;
     transform: translate(-50%,-50%);
     mix-blend-mode: multiply;
@@ -1265,18 +1265,6 @@ const css = (T) => `
                 transform 0.4s cubic-bezier(0.2,0.8,0.2,1),
                 box-shadow 0.4s ease;
   }
-  .card::after {
-    content: ''; position: absolute; inset: 0; border-radius: inherit;
-    background: linear-gradient(135deg, rgba(245,158,11,0.05) 0%, transparent 55%);
-    opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
-  }
-  .card:hover {
-    border-color: var(--border-hov);
-    transform: translateY(-5px);
-    box-shadow: 0 28px 64px rgba(0,0,0,0.5), 0 0 32px var(--glow),
-                inset 0 1px 0 rgba(255,255,255,0.06);
-  }
-  .card:hover::after { opacity: 1; }
 
   /* ─── Timeline ─── */
   .timeline {
