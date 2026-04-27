@@ -101,22 +101,6 @@ function WireframeBuilding() {
 
 // ─── Shared Components ────────────────────────────────────────────────────────
 
-function ScrollProgress() {
-  const [pct, setPct] = useState(0);
-  useEffect(() => {
-    const fn = () => {
-      const d = document.documentElement;
-      setPct((d.scrollTop / (d.scrollHeight - d.clientHeight)) * 100 || 0);
-    };
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-  return <div className="scroll-progress" style={{ transform: `scaleX(${pct / 100})` }} />;
-}
-
-function Reveal({ children, className = "" }) {
-  return <div className={className}>{children}</div>;
-}
 
 function Counter({ end, suffix = "" }) {
   const [val, setVal] = useState(0);
@@ -306,13 +290,11 @@ function MobileMenu({ pages, activePage, navigate }) {
 function SectionHeader({ eyebrow, title, accent }) {
   return (
     <div className="section-header">
-      <Reveal>
-        <p className="eyebrow"><span className="eyebrow-line" />{eyebrow}</p>
-        <h2 className="section-title">
-          {title}<br />
-          <em className="section-em">{accent}</em>
-        </h2>
-      </Reveal>
+      <p className="eyebrow"><span className="eyebrow-line" />{eyebrow}</p>
+      <h2 className="section-title">
+        {title}<br />
+        <em className="section-em">{accent}</em>
+      </h2>
     </div>
   );
 }
@@ -371,59 +353,51 @@ function HomePage({ onNavigate }) {
         <div className="section-wrap">
           <div className="hero-wrap">
             <div className="hero-left">
-              <Reveal>
-                <div className="hero-eyebrow">
-                  <span className="exp-badge">
-                    <span className="exp-dot" />
-                    Available for opportunities
-                  </span>
-                </div>
-                <h1 className="hero-head">
-                  <span className="hh-line">
-                    <i>I&apos;m Mahmoud Saad</i>
-                  </span>
-                  <span className="hh-line">
-                    <b>Civil Engineer</b>
-                    <span>&amp;</span>
-                    <b>Math Tutor</b>
-                  </span>
-                  <span className="hh-line">
-                    <i>Based in</i>
-                    <b>Istanbul</b>
-                  </span>
-                </h1>
-              </Reveal>
+              <div className="hero-eyebrow">
+                <span className="exp-badge">
+                  <span className="exp-dot" />
+                  Available for opportunities
+                </span>
+              </div>
+              <h1 className="hero-head">
+                <span className="hh-line">
+                  <i>I&apos;m Mahmoud Saad</i>
+                </span>
+                <span className="hh-line">
+                  <b>Civil Engineer</b>
+                  <span>&amp;</span>
+                  <b>Math Tutor</b>
+                </span>
+                <span className="hh-line">
+                  <i>Based in</i>
+                  <b>Istanbul</b>
+                </span>
+              </h1>
 
-              <Reveal delay={0.22}>
-                <p className="hero-bio">
-                  I build practical structural solutions and help students master
-                  mathematics through clear, step-by-step teaching. I focus on
-                  quality execution, strong communication, and measurable results.
-                </p>
-              </Reveal>
+              <p className="hero-bio">
+                I build practical structural solutions and help students master
+                mathematics through clear, step-by-step teaching. I focus on
+                quality execution, strong communication, and measurable results.
+              </p>
 
-              <Reveal delay={0.3}>
-                <div className="hero-btns">
-                  <button className="btn-primary btn-capsule" onClick={() => onNavigate("Contact")}>
-                    Get In Touch <Icons.ArrowRight />
-                  </button>
-                </div>
-              </Reveal>
+              <div className="hero-btns">
+                <button className="btn-primary btn-capsule" onClick={() => onNavigate("Contact")}>
+                  Get In Touch <Icons.ArrowRight />
+                </button>
+              </div>
 
-              <Reveal delay={0.4}>
-                <div className="hero-stats">
-                  {[
-                    { n: 4, s: "+", l: "Professional Roles" },
-                    { n: 3, s: "", l: "Languages" },
-                    { n: 4, s: "+", l: "Years Tutoring" },
-                  ].map((st, i) => (
-                    <div key={i} className="stat-cell">
-                      <span className="stat-num"><Counter end={st.n} suffix={st.s} /></span>
-                      <span className="stat-lbl">{st.l}</span>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
+              <div className="hero-stats">
+                {[
+                  { n: 4, s: "+", l: "Professional Roles" },
+                  { n: 3, s: "", l: "Languages" },
+                  { n: 4, s: "+", l: "Years Tutoring" },
+                ].map((st, i) => (
+                  <div key={i} className="stat-cell">
+                    <span className="stat-num"><Counter end={st.n} suffix={st.s} /></span>
+                    <span className="stat-lbl">{st.l}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="hero-right">
@@ -431,9 +405,7 @@ function HomePage({ onNavigate }) {
             </div>
           </div>
 
-          <Reveal delay={0.5}>
-            <SkillsMarquee />
-          </Reveal>
+          <SkillsMarquee />
         </div>
       </div>
 
@@ -514,32 +486,30 @@ function ExperiencePage() {
           {jobs.map((job, i) => {
             const { label, cls } = tagMeta[job.tag];
             return (
-              <Reveal key={i} delay={i * 0.07}>
-                <div className="tl-item">
-                  <div className={`tl-dot ${job.tag === "current" ? "tl-dot-live" : ""}`} />
-                  <div className="card tl-card">
-                    <div className="tl-head">
-                      <div className="tl-title-row">
-                        <h3 className="tl-co">{job.co}</h3>
-                        <span className={`chip ${cls}`}>{label}</span>
-                      </div>
-                      <div className="tl-meta">
-                        <span className="tl-loc">{job.loc}</span>
-                        <span className="tl-date">{job.date}</span>
-                      </div>
+              <div className="tl-item" key={i} style={{ animationDelay: `${i * 0.07}s` }}>
+                <div className={`tl-dot ${job.tag === "current" ? "tl-dot-live" : ""}`} />
+                <div className="card tl-card">
+                  <div className="tl-head">
+                    <div className="tl-title-row">
+                      <h3 className="tl-co">{job.co}</h3>
+                      <span className={`chip ${cls}`}>{label}</span>
                     </div>
-                    <p className="tl-role">{job.role}</p>
-                    <ul className="tl-bullets">
-                      {job.bullets.map((b, bi) => (
-                        <li key={bi}>
-                          <span className="check-icon"><Icons.Check /></span>
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="tl-meta">
+                      <span className="tl-loc">{job.loc}</span>
+                      <span className="tl-date">{job.date}</span>
+                    </div>
                   </div>
+                  <p className="tl-role">{job.role}</p>
+                  <ul className="tl-bullets">
+                    {job.bullets.map((b, bi) => (
+                      <li key={bi}>
+                        <span className="check-icon"><Icons.Check /></span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </Reveal>
+              </div>
             );
           })}
         </div>
@@ -566,67 +536,57 @@ function SkillsPage() {
 
         <div className="svc-grid">
           {services.map((svc, i) => (
-            <Reveal key={i} delay={i * 0.09}>
-              <div className="card svc-card">
-                <span className="svc-num">{svc.num}</span>
-                <h3 className="svc-title">{svc.title}</h3>
-                <p className="svc-desc">{svc.desc}</p>
-                <div className="chip-row">
-                  {svc.tags.map((t, ti) => <span key={ti} className="chip chip-muted">{t}</span>)}
-                </div>
+            <div className="card svc-card" key={i} style={{ animationDelay: `${i * 0.09}s` }}>
+              <span className="svc-num">{svc.num}</span>
+              <h3 className="svc-title">{svc.title}</h3>
+              <p className="svc-desc">{svc.desc}</p>
+              <div className="chip-row">
+                {svc.tags.map((t, ti) => <span key={ti} className="chip chip-muted">{t}</span>)}
               </div>
-            </Reveal>
+            </div>
           ))}
         </div>
 
-        <Reveal delay={0.28}>
-          <div className="card tools-card">
-            <p className="eyebrow"><span className="eyebrow-line" />Technical Skills &amp; Tools</p>
-            <div className="chip-row chip-row-dense">
-              {tools.map((t, i) => <span key={i} className="chip chip-accent">{t}</span>)}
-            </div>
+        <div className="card tools-card">
+          <p className="eyebrow"><span className="eyebrow-line" />Technical Skills &amp; Tools</p>
+          <div className="chip-row chip-row-dense">
+            {tools.map((t, i) => <span key={i} className="chip chip-accent">{t}</span>)}
           </div>
-        </Reveal>
-
-        <div className="edu-lang-grid">
-          <Reveal delay={0.34}>
-            <div className="card edu-card">
-              <p className="eyebrow"><span className="eyebrow-line" />Education</p>
-              <h3 className="edu-degree">B.Sc. Civil Engineering</h3>
-              <p className="edu-school">Istanbul Nişantaşı University</p>
-              <p className="edu-date">Sep 2021 – Jul 2025</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.42}>
-            <div className="card lang-card">
-              <p className="eyebrow"><span className="eyebrow-line" />Languages</p>
-              <div className="lang-list">
-                {[["Arabic", "Native", 100], ["English", "Fluent", 90], ["Turkish", "Fluent", 85]].map(([lang, lvl, pct], i) => (
-                  <div key={i} className="lang-item">
-                    <div className="lang-row">
-                      <span className="lang-name">{lang}</span>
-                      <span className="lang-level">{lvl}</span>
-                    </div>
-                    <div className="prog-track">
-                      <div className="prog-fill" style={{ width: `${pct}%`, transitionDelay: `${0.5 + i * 0.12}s` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
         </div>
 
-        <Reveal delay={0.5}>
-          <div className="card vol-card">
-            <div>
-              <p className="eyebrow"><span className="eyebrow-line" />Volunteering</p>
-              <h3 className="vol-title">Genç Türk Kızılay</h3>
-              <p className="vol-desc">Humanitarian campaigns, sports events, and community leadership</p>
-            </div>
-            <span className="vol-date">May 2021 – Feb 2022</span>
+        <div className="edu-lang-grid">
+          <div className="card edu-card">
+            <p className="eyebrow"><span className="eyebrow-line" />Education</p>
+            <h3 className="edu-degree">B.Sc. Civil Engineering</h3>
+            <p className="edu-school">Istanbul Nişantaşı University</p>
+            <p className="edu-date">Sep 2021 – Jul 2025</p>
           </div>
-        </Reveal>
+          <div className="card lang-card">
+            <p className="eyebrow"><span className="eyebrow-line" />Languages</p>
+            <div className="lang-list">
+              {[["Arabic", "Native", 100], ["English", "Fluent", 90], ["Turkish", "Fluent", 85]].map(([lang, lvl, pct], i) => (
+                <div key={i} className="lang-item">
+                  <div className="lang-row">
+                    <span className="lang-name">{lang}</span>
+                    <span className="lang-level">{lvl}</span>
+                  </div>
+                  <div className="prog-track">
+                    <div className="prog-fill" style={{ width: `${pct}%`, transitionDelay: `${0.5 + i * 0.12}s` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="card vol-card">
+          <div>
+            <p className="eyebrow"><span className="eyebrow-line" />Volunteering</p>
+            <h3 className="vol-title">Genç Türk Kızılay</h3>
+            <p className="vol-desc">Humanitarian campaigns, sports events, and community leadership</p>
+          </div>
+          <span className="vol-date">May 2021 – Feb 2022</span>
+        </div>
       </div>
     </div>
   );
@@ -682,62 +642,58 @@ function ContactPage() {
 
         <div className="contact-grid">
           {contacts.map((c, i) => (
-            <Reveal key={i} delay={i * 0.07}>
-              <div className="card contact-card">
-                <span className="contact-icon-wrap">{c.icon}</span>
-                <div>
-                  <p className="contact-lbl">{c.label}</p>
-                  {c.href ? (
-                    <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined}
-                      rel="noopener noreferrer" className="contact-val contact-link">
-                      {c.value}
-                    </a>
-                  ) : (
-                    <p className="contact-val">{c.value}</p>
-                  )}
-                </div>
+            <div className="card contact-card" key={i} style={{ animationDelay: `${i * 0.07}s` }}>
+              <span className="contact-icon-wrap">{c.icon}</span>
+              <div>
+                <p className="contact-lbl">{c.label}</p>
+                {c.href ? (
+                  <a href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined}
+                    rel="noopener noreferrer" className="contact-val contact-link">
+                    {c.value}
+                  </a>
+                ) : (
+                  <p className="contact-val">{c.value}</p>
+                )}
               </div>
-            </Reveal>
+            </div>
           ))}
         </div>
 
-        <Reveal delay={0.3}>
-          <div className="card form-card">
-            <form onSubmit={submit}>
-              <div className="form-row">
-                <div className="field">
-                  <label>Your Name</label>
-                  <input type="text" placeholder="John Doe" required value={form.name} onChange={set("name")} />
-                </div>
-                <div className="field">
-                  <label>Email Address</label>
-                  <input type="email" placeholder="john@example.com" required value={form.email} onChange={set("email")} />
-                </div>
+        <div className="card form-card">
+          <form onSubmit={submit}>
+            <div className="form-row">
+              <div className="field">
+                <label>Your Name</label>
+                <input type="text" placeholder="John Doe" required value={form.name} onChange={set("name")} />
               </div>
               <div className="field">
-                <label>Message</label>
-                <textarea rows={5} placeholder="Tell me about your project or opportunity…" required
-                  value={form.message} onChange={set("message")} />
+                <label>Email Address</label>
+                <input type="email" placeholder="john@example.com" required value={form.email} onChange={set("email")} />
               </div>
-              <button type="submit" className="btn-primary" disabled={status !== "idle"}>
-                {status === "idle" && <><Icons.ArrowRight /> Send Message</>}
-                {status === "sending" && "Sending..."}
-                {status === "success" && "Success!"}
-                {status === "error" && "Try Again"}
-              </button>
-              {status === "success" && (
-                <p style={{ color: "var(--green)", fontSize: "13px", marginTop: "12px", fontWeight: "500" }}>
-                  Thank you! Your message has been sent successfully.
-                </p>
-              )}
-              {status === "error" && (
-                <p style={{ color: "#ef4444", fontSize: "13px", marginTop: "12px", fontWeight: "500" }}>
-                  Something went wrong. Please try again or email me directly.
-                </p>
-              )}
-            </form>
-          </div>
-        </Reveal>
+            </div>
+            <div className="field">
+              <label>Message</label>
+              <textarea rows={5} placeholder="Tell me about your project or opportunity…" required
+                value={form.message} onChange={set("message")} />
+            </div>
+            <button type="submit" className="btn-primary" disabled={status !== "idle"}>
+              {status === "idle" && <><Icons.ArrowRight /> Send Message</>}
+              {status === "sending" && "Sending..."}
+              {status === "success" && "Success!"}
+              {status === "error" && "Try Again"}
+            </button>
+            {status === "success" && (
+              <p style={{ color: "var(--green)", fontSize: "13px", marginTop: "12px", fontWeight: "500" }}>
+                Thank you! Your message has been sent successfully.
+              </p>
+            )}
+            {status === "error" && (
+              <p style={{ color: "#ef4444", fontSize: "13px", marginTop: "12px", fontWeight: "500" }}>
+                Something went wrong. Please try again or email me directly.
+              </p>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -961,8 +917,6 @@ const css = (T) => `
     from { opacity: 1; transform: translateY(0); }
     to   { opacity: 0; transform: translateY(-10px); }
   }
-
-  /* ─── Reveal animation removed ─── */
 
   /* ─── Home page section dividers ─── */
   .home-sec { border-top: 1px solid var(--border); }
