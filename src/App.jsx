@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import charImg from "./assets/character.png";
+import cvPdf from "./assets/MAHMOUD_AHMED_CV_ATS.pdf";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/eng-mahmoud-saad-635185249/";
 const YOUTUBE_URL = "https://www.youtube.com/@mahmoudabdelhady6253/playlists";
@@ -35,6 +36,7 @@ const Icons = {
   Menu: () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>,
   X: () => <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6 6 18M6 6l12 12" /></svg>,
   Youtube: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z" /><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" /></svg>,
+  ArrowDown: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>,
 };
 
 // ─── Three.js Wireframe Building ─────────────────────────────────────────────
@@ -384,6 +386,13 @@ function HomePage({ onNavigate }) {
                 <button className="btn-primary btn-capsule" onClick={() => onNavigate("Contact")}>
                   Get In Touch <Icons.ArrowRight />
                 </button>
+                <a
+                  className="btn-ghost btn-capsule"
+                  href={cvPdf}
+                  download="Mahmoud_Saad_CV.pdf"
+                >
+                  Download CV <Icons.ArrowDown />
+                </a>
               </div>
 
               <div className="hero-stats">
@@ -621,7 +630,7 @@ function ContactPage() {
       } else {
         setStatus("error");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
     }
   };
