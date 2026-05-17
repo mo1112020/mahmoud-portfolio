@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from "react"
 import ReactDOM from "react-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import charImg from "./assets/character.png";
 import cvPdf from "./assets/MAHMOUD_AHMED_CV_ATS.pdf";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/eng-mahmoud-saad-635185249/";
@@ -39,31 +38,31 @@ const Icons = {
   ArrowDown: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>,
 };
 
-// ─── Three.js Wireframe Human ────────────────────────────────────────────────
+// ─── Three.js Human Figure ────────────────────────────────────────────────────
 
-function WireframeHuman() {
-  const groupRef = useRef();
-  const scanRef = useRef();
+function HumanFigure() {
+  const groupRef        = useRef();
+  const rightArmRef     = useRef();
+  const rightElbowRef   = useRef();
 
-  const headGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.SphereGeometry(0.22, 8, 6)), []);
-  const neckGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.07, 0.08, 0.18, 6)), []);
-  const shoulderGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.82, 0.1, 0.2)), []);
-  const torsoGeo     = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.52, 0.72, 0.22)), []);
-  const hipsGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.44, 0.18, 0.2)), []);
-  const upperArmGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.07, 0.07, 0.48, 6)), []);
-  const forearmGeo   = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.055, 0.055, 0.42, 6)), []);
-  const upperLegGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.1, 0.09, 0.58, 6)), []);
-  const lowerLegGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.075, 0.065, 0.52, 6)), []);
-  const footGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.12, 0.07, 0.27)), []);
+  const bodyMat  = useMemo(() => new THREE.MeshStandardMaterial({ color: "#c8c4bc", roughness: 0.85, metalness: 0.05 }), []);
+  const jointMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#10b981", emissive: "#10b981", emissiveIntensity: 1.2 }), []);
 
-  const joints = useMemo(() => [
+  useFrame(({ clock }) => {
+    if (groupRef.current)
+      groupRef.current.rotation.y += 0.003;
+    // Smoothly raise right arm then wave forearm
+    if (rightArmRef.current)
+      rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, 2.05, 0.04);
+    if (rightElbowRef.current)
+      rightElbowRef.current.rotation.z = Math.sin(clock.elapsedTime * 3) * 0.5;
+  });
+
+  const staticJoints = useMemo(() => [
     [0,     1.19,  0],
     [0,     1.00,  0],
-    [0.41,  0.95,  0],
     [-0.41, 0.95,  0],
-    [0.53,  0.48,  0],
     [-0.53, 0.48,  0],
-    [0.57,  0.06,  0],
     [-0.57, 0.06,  0],
     [0.17,  0.10,  0],
     [-0.17, 0.10,  0],
@@ -73,86 +72,89 @@ function WireframeHuman() {
     [-0.17, -1.00, 0],
   ], []);
 
-  useFrame(({ clock }) => {
-    if (groupRef.current) groupRef.current.rotation.y += 0.003;
-    if (scanRef.current)
-      scanRef.current.position.y = Math.sin(clock.elapsedTime * 0.7) * 1.2;
-  });
-
   return (
     <group ref={groupRef}>
       {/* Head */}
-      <lineSegments geometry={headGeo} position={[0, 1.41, 0]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
+      <mesh position={[0, 1.41, 0]} material={bodyMat}>
+        <sphereGeometry args={[0.22, 16, 12]} />
+      </mesh>
       {/* Neck */}
-      <lineSegments geometry={neckGeo} position={[0, 1.09, 0]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
+      <mesh position={[0, 1.09, 0]} material={bodyMat}>
+        <cylinderGeometry args={[0.07, 0.08, 0.18, 8]} />
+      </mesh>
       {/* Shoulder bar */}
-      <lineSegments geometry={shoulderGeo} position={[0, 0.95, 0]}>
-        <lineBasicMaterial color="#57534e" />
-      </lineSegments>
+      <mesh position={[0, 0.90, 0]} material={bodyMat}>
+        <boxGeometry args={[0.82, 0.12, 0.20]} />
+      </mesh>
       {/* Torso */}
-      <lineSegments geometry={torsoGeo} position={[0, 0.53, 0]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
+      <mesh position={[0, 0.53, 0]} material={bodyMat}>
+        <boxGeometry args={[0.52, 0.72, 0.22]} />
+      </mesh>
       {/* Hips */}
-      <lineSegments geometry={hipsGeo} position={[0, 0.10, 0]}>
-        <lineBasicMaterial color="#57534e" />
-      </lineSegments>
-      {/* Right upper arm */}
-      <lineSegments geometry={upperArmGeo} position={[0.46, 0.71, 0]} rotation={[0, 0, 0.3]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Left upper arm */}
-      <lineSegments geometry={upperArmGeo} position={[-0.46, 0.71, 0]} rotation={[0, 0, -0.3]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Right forearm */}
-      <lineSegments geometry={forearmGeo} position={[0.54, 0.27, 0]} rotation={[0, 0, 0.12]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Left forearm */}
-      <lineSegments geometry={forearmGeo} position={[-0.54, 0.27, 0]} rotation={[0, 0, -0.12]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Right upper leg */}
-      <lineSegments geometry={upperLegGeo} position={[0.17, -0.19, 0]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Left upper leg */}
-      <lineSegments geometry={upperLegGeo} position={[-0.17, -0.19, 0]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Right lower leg */}
-      <lineSegments geometry={lowerLegGeo} position={[0.17, -0.74, 0]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Left lower leg */}
-      <lineSegments geometry={lowerLegGeo} position={[-0.17, -0.74, 0]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Right foot */}
-      <lineSegments geometry={footGeo} position={[0.17, -1.04, 0.07]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
-      {/* Left foot */}
-      <lineSegments geometry={footGeo} position={[-0.17, -1.04, 0.07]}>
-        <lineBasicMaterial color="#78716c" />
-      </lineSegments>
+      <mesh position={[0, 0.10, 0]} material={bodyMat}>
+        <boxGeometry args={[0.44, 0.20, 0.20]} />
+      </mesh>
 
-      {/* Scan line */}
-      <mesh ref={scanRef}>
-        <planeGeometry args={[1.1, 0.015]} />
-        <meshBasicMaterial color="#10b981" transparent opacity={0.5} side={THREE.DoubleSide} />
+      {/* Left arm — static */}
+      <mesh position={[-0.46, 0.71, 0]} rotation={[0, 0, -0.3]} material={bodyMat}>
+        <cylinderGeometry args={[0.07, 0.07, 0.48, 8]} />
+      </mesh>
+      <mesh position={[-0.54, 0.27, 0]} rotation={[0, 0, -0.12]} material={bodyMat}>
+        <cylinderGeometry args={[0.055, 0.055, 0.42, 8]} />
+      </mesh>
+      <mesh position={[-0.57, 0.06, 0]} material={bodyMat}>
+        <sphereGeometry args={[0.07, 8, 8]} />
+      </mesh>
+
+      {/* Right arm — pivots at shoulder for wave animation */}
+      <group position={[0.41, 0.95, 0]} ref={rightArmRef}>
+        <mesh position={[0, -0.24, 0]} material={bodyMat}>
+          <cylinderGeometry args={[0.07, 0.07, 0.48, 8]} />
+        </mesh>
+        {/* Elbow pivot */}
+        <group position={[0, -0.48, 0]} ref={rightElbowRef}>
+          <mesh position={[0, 0, 0]} material={jointMat}>
+            <sphereGeometry args={[0.04, 8, 8]} />
+          </mesh>
+          <mesh position={[0, -0.21, 0]} material={bodyMat}>
+            <cylinderGeometry args={[0.055, 0.055, 0.42, 8]} />
+          </mesh>
+          {/* Hand */}
+          <mesh position={[0, -0.42, 0]} material={bodyMat}>
+            <sphereGeometry args={[0.07, 8, 8]} />
+          </mesh>
+        </group>
+      </group>
+
+      {/* Right upper leg */}
+      <mesh position={[0.17, -0.19, 0]} material={bodyMat}>
+        <cylinderGeometry args={[0.10, 0.09, 0.58, 8]} />
+      </mesh>
+      {/* Left upper leg */}
+      <mesh position={[-0.17, -0.19, 0]} material={bodyMat}>
+        <cylinderGeometry args={[0.10, 0.09, 0.58, 8]} />
+      </mesh>
+      {/* Right lower leg */}
+      <mesh position={[0.17, -0.74, 0]} material={bodyMat}>
+        <cylinderGeometry args={[0.075, 0.065, 0.52, 8]} />
+      </mesh>
+      {/* Left lower leg */}
+      <mesh position={[-0.17, -0.74, 0]} material={bodyMat}>
+        <cylinderGeometry args={[0.075, 0.065, 0.52, 8]} />
+      </mesh>
+      {/* Right foot */}
+      <mesh position={[0.17, -1.04, 0.07]} material={bodyMat}>
+        <boxGeometry args={[0.12, 0.07, 0.27]} />
+      </mesh>
+      {/* Left foot */}
+      <mesh position={[-0.17, -1.04, 0.07]} material={bodyMat}>
+        <boxGeometry args={[0.12, 0.07, 0.27]} />
       </mesh>
 
       {/* Glowing joints */}
-      {joints.map(([x, y, z], i) => (
-        <mesh key={i} position={[x, y, z]}>
+      {staticJoints.map(([x, y, z], i) => (
+        <mesh key={i} position={[x, y, z]} material={jointMat}>
           <sphereGeometry args={[0.04, 8, 8]} />
-          <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={1.5} />
         </mesh>
       ))}
     </group>
@@ -217,36 +219,8 @@ function SkillsMarquee() {
 }
 
 function HeroVisual() {
-  const [msgIdx, setMsgIdx] = useState(0);
-  const [isTalking, setIsTalking] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const frameRef = useRef(null);
-
-  const msgs = [
-    "Welcome to my portfolio!",
-    "How can I help you today?",
-    "Need an engineering tutor?",
-    "Building things is my passion!",
-    "Let's create something great!",
-    "Check out my YouTube channel!",
-    "Success starts with a plan.",
-    "Calculus 1 & 2 are my specialty!",
-    "Solving problems, one at a time.",
-    "Ready for our next project?",
-    "Innovation in every design.",
-    "Welcome! Click me for more!",
-  ];
-
-  const nextMsg = () => {
-    setMsgIdx((i) => (i + 1) % msgs.length);
-    setIsTalking(true);
-    setTimeout(() => setIsTalking(false), 2000);
-  };
-
-  useEffect(() => {
-    const t = setInterval(nextMsg, 8000);
-    return () => clearInterval(t);
-  }, []);
 
   const handleMouseMove = useCallback((e) => {
     const el = frameRef.current;
@@ -279,26 +253,14 @@ function HeroVisual() {
         <Canvas
           className="bp-canvas"
           gl={{ alpha: true }}
-          camera={{ position: [0, 0.5, 4], fov: 45 }}
+          camera={{ position: [0, 0.3, 4.5], fov: 44 }}
           style={{ width: "100%", height: "100%" }}
         >
-          <ambientLight intensity={0.4} />
-          <pointLight position={[2, 4, 2]} intensity={1.0} />
-          <WireframeHuman />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[2, 4, 2]} intensity={1.2} />
+          <pointLight position={[-1, 2, 3]} intensity={0.4} color="#e7e5e4" />
+          <HumanFigure />
         </Canvas>
-
-        <div
-          className={`char-wrap ${isTalking ? "is-talking" : ""}`}
-          onClick={nextMsg}
-          style={{ cursor: "pointer" }}
-        >
-          <div className="char-circle">
-            <div className="char-glow" />
-            <img src={charImg} alt="Welcome" className="hero-char" />
-            <div className="mouth-anim" />
-          </div>
-          <div className="welcome-bubble">{msgs[msgIdx]}</div>
-        </div>
 
         <div className="float-tag ft-tl">AutoCAD</div>
         <div className="float-tag ft-tr">SAP2000</div>
