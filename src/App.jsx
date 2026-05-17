@@ -41,16 +41,13 @@ const Icons = {
 // ─── Three.js Human Figure ────────────────────────────────────────────────────
 
 function HumanFigure() {
-  const groupRef        = useRef();
-  const rightArmRef     = useRef();
-  const rightElbowRef   = useRef();
+  const rightArmRef   = useRef();
+  const rightElbowRef = useRef();
 
   const bodyMat  = useMemo(() => new THREE.MeshStandardMaterial({ color: "#c8c4bc", roughness: 0.85, metalness: 0.05 }), []);
   const jointMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#10b981", emissive: "#10b981", emissiveIntensity: 1.2 }), []);
 
   useFrame(({ clock }) => {
-    if (groupRef.current)
-      groupRef.current.rotation.y += 0.003;
     // Smoothly raise right arm then wave forearm
     if (rightArmRef.current)
       rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, 2.05, 0.04);
@@ -73,7 +70,7 @@ function HumanFigure() {
   ], []);
 
   return (
-    <group ref={groupRef}>
+    <group>
       {/* Head */}
       <mesh position={[0, 1.41, 0]} material={bodyMat}>
         <sphereGeometry args={[0.22, 16, 12]} />
