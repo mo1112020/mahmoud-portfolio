@@ -25,7 +25,7 @@ import cvPdf from './assets/MAHMOUD_AHMED_CV_ATS.pdf';
 Render as an `<a>` tag (not a `<button>`) with:
 - `href={cvPdf}` — resolved asset URL
 - `download` attribute — browser triggers file download instead of navigation
-- A download icon from the existing `Icons` set (or a simple inline SVG arrow-down if none exists)
+- An `ArrowDown` icon added to the existing `Icons` object (inline SVG, same style as `ArrowRight`)
 
 ### Responsive behaviour
 On mobile, `.hero-btns` already switches to `flex-direction: column; align-items: stretch`, so both buttons stack full-width automatically. No additional CSS needed.
