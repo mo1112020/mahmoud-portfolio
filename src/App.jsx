@@ -39,64 +39,122 @@ const Icons = {
   ArrowDown: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>,
 };
 
-// ─── Three.js Wireframe Building ─────────────────────────────────────────────
+// ─── Three.js Wireframe Human ────────────────────────────────────────────────
 
-function WireframeBuilding() {
+function WireframeHuman() {
   const groupRef = useRef();
   const scanRef = useRef();
 
-  const towerEdges = useMemo(
-    () => new THREE.EdgesGeometry(new THREE.BoxGeometry(1.2, 3, 1.2)),
-    []
-  );
-  const floorEdges = useMemo(
-    () => new THREE.EdgesGeometry(new THREE.BoxGeometry(1.2, 0.01, 1.2)),
-    []
-  );
-  const floorY = useMemo(() => [-0.9, -0.3, 0.3, 0.9], []);
+  const headGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.SphereGeometry(0.22, 8, 6)), []);
+  const neckGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.07, 0.08, 0.18, 6)), []);
+  const shoulderGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.82, 0.1, 0.2)), []);
+  const torsoGeo     = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.52, 0.72, 0.22)), []);
+  const hipsGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.44, 0.18, 0.2)), []);
+  const upperArmGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.07, 0.07, 0.48, 6)), []);
+  const forearmGeo   = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.055, 0.055, 0.42, 6)), []);
+  const upperLegGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.1, 0.09, 0.58, 6)), []);
+  const lowerLegGeo  = useMemo(() => new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.075, 0.065, 0.52, 6)), []);
+  const footGeo      = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(0.12, 0.07, 0.27)), []);
+
   const joints = useMemo(() => [
-    [-0.6, -1.5, -0.6], [0.6, -1.5, -0.6], [-0.6, -1.5, 0.6], [0.6, -1.5, 0.6],
-    [-0.6,  1.5, -0.6], [0.6,  1.5, -0.6], [-0.6,  1.5, 0.6], [0.6,  1.5, 0.6],
+    [0,     1.19,  0],
+    [0,     1.00,  0],
+    [0.41,  0.95,  0],
+    [-0.41, 0.95,  0],
+    [0.53,  0.48,  0],
+    [-0.53, 0.48,  0],
+    [0.57,  0.06,  0],
+    [-0.57, 0.06,  0],
+    [0.17,  0.10,  0],
+    [-0.17, 0.10,  0],
+    [0.17,  -0.48, 0],
+    [-0.17, -0.48, 0],
+    [0.17,  -1.00, 0],
+    [-0.17, -1.00, 0],
   ], []);
 
   useFrame(({ clock }) => {
     if (groupRef.current) groupRef.current.rotation.y += 0.003;
     if (scanRef.current)
-      scanRef.current.position.y = Math.sin(clock.elapsedTime * 0.8) * 1.5;
+      scanRef.current.position.y = Math.sin(clock.elapsedTime * 0.7) * 1.2;
   });
 
   return (
     <group ref={groupRef}>
-      <lineSegments geometry={towerEdges}>
+      {/* Head */}
+      <lineSegments geometry={headGeo} position={[0, 1.41, 0]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Neck */}
+      <lineSegments geometry={neckGeo} position={[0, 1.09, 0]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Shoulder bar */}
+      <lineSegments geometry={shoulderGeo} position={[0, 0.95, 0]}>
+        <lineBasicMaterial color="#57534e" />
+      </lineSegments>
+      {/* Torso */}
+      <lineSegments geometry={torsoGeo} position={[0, 0.53, 0]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Hips */}
+      <lineSegments geometry={hipsGeo} position={[0, 0.10, 0]}>
+        <lineBasicMaterial color="#57534e" />
+      </lineSegments>
+      {/* Right upper arm */}
+      <lineSegments geometry={upperArmGeo} position={[0.46, 0.71, 0]} rotation={[0, 0, 0.3]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Left upper arm */}
+      <lineSegments geometry={upperArmGeo} position={[-0.46, 0.71, 0]} rotation={[0, 0, -0.3]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Right forearm */}
+      <lineSegments geometry={forearmGeo} position={[0.54, 0.27, 0]} rotation={[0, 0, 0.12]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Left forearm */}
+      <lineSegments geometry={forearmGeo} position={[-0.54, 0.27, 0]} rotation={[0, 0, -0.12]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Right upper leg */}
+      <lineSegments geometry={upperLegGeo} position={[0.17, -0.19, 0]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Left upper leg */}
+      <lineSegments geometry={upperLegGeo} position={[-0.17, -0.19, 0]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Right lower leg */}
+      <lineSegments geometry={lowerLegGeo} position={[0.17, -0.74, 0]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Left lower leg */}
+      <lineSegments geometry={lowerLegGeo} position={[-0.17, -0.74, 0]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Right foot */}
+      <lineSegments geometry={footGeo} position={[0.17, -1.04, 0.07]}>
+        <lineBasicMaterial color="#78716c" />
+      </lineSegments>
+      {/* Left foot */}
+      <lineSegments geometry={footGeo} position={[-0.17, -1.04, 0.07]}>
         <lineBasicMaterial color="#78716c" />
       </lineSegments>
 
-      {floorY.map((y, i) => (
-        <lineSegments key={i} geometry={floorEdges} position={[0, y, 0]}>
-          <lineBasicMaterial color="#57534e" transparent opacity={0.7} />
-        </lineSegments>
-      ))}
+      {/* Scan line */}
+      <mesh ref={scanRef}>
+        <planeGeometry args={[1.1, 0.015]} />
+        <meshBasicMaterial color="#10b981" transparent opacity={0.5} side={THREE.DoubleSide} />
+      </mesh>
 
+      {/* Glowing joints */}
       {joints.map(([x, y, z], i) => (
         <mesh key={i} position={[x, y, z]}>
-          <sphereGeometry args={[0.05, 8, 8]} />
-          <meshStandardMaterial
-            color="#10b981"
-            emissive="#10b981"
-            emissiveIntensity={1.5}
-          />
+          <sphereGeometry args={[0.04, 8, 8]} />
+          <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={1.5} />
         </mesh>
       ))}
-
-      <mesh ref={scanRef}>
-        <planeGeometry args={[1.4, 0.02]} />
-        <meshBasicMaterial
-          color="#10b981"
-          transparent
-          opacity={0.5}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
     </group>
   );
 }
@@ -226,7 +284,7 @@ function HeroVisual() {
         >
           <ambientLight intensity={0.4} />
           <pointLight position={[2, 4, 2]} intensity={1.0} />
-          <WireframeBuilding />
+          <WireframeHuman />
         </Canvas>
 
         <div
