@@ -44,116 +44,116 @@ function HumanFigure() {
   const rightArmRef   = useRef();
   const rightElbowRef = useRef();
 
-  const bodyMat  = useMemo(() => new THREE.MeshStandardMaterial({ color: "#c8c4bc", roughness: 0.85, metalness: 0.05 }), []);
-  const jointMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#10b981", emissive: "#10b981", emissiveIntensity: 1.2 }), []);
+  const skinMat  = useMemo(() => new THREE.MeshStandardMaterial({ color: "#D4956A", roughness: 0.75, metalness: 0.0 }), []);
+  const hairMat  = useMemo(() => new THREE.MeshStandardMaterial({ color: "#1A0E08", roughness: 1.0 }), []);
+  const shirtMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#2D5DA6", roughness: 0.85 }), []);
+  const pantsMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#1E2B3C", roughness: 0.9 }), []);
+  const shoesMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0D0D0D", roughness: 0.65 }), []);
+  const eyeMat   = useMemo(() => new THREE.MeshStandardMaterial({ color: "#080808", roughness: 0.2, metalness: 0.4 }), []);
 
   useFrame(({ clock }) => {
-    // Smoothly raise right arm then wave forearm
     if (rightArmRef.current)
       rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, 2.05, 0.04);
     if (rightElbowRef.current)
       rightElbowRef.current.rotation.z = Math.sin(clock.elapsedTime * 3) * 0.5;
   });
 
-  const staticJoints = useMemo(() => [
-    [0,     1.19,  0],
-    [0,     1.00,  0],
-    [-0.41, 0.95,  0],
-    [-0.53, 0.48,  0],
-    [-0.57, 0.06,  0],
-    [0.17,  0.10,  0],
-    [-0.17, 0.10,  0],
-    [0.17,  -0.48, 0],
-    [-0.17, -0.48, 0],
-    [0.17,  -1.00, 0],
-    [-0.17, -1.00, 0],
-  ], []);
-
   return (
     <group>
+      {/* ── Head ── */}
+      {/* Hair cap (top hemisphere, slightly larger than head) */}
+      <mesh position={[0, 1.50, -0.01]} material={hairMat}>
+        <sphereGeometry args={[0.235, 20, 10, 0, Math.PI * 2, 0, Math.PI * 0.52]} />
+      </mesh>
       {/* Head */}
-      <mesh position={[0, 1.41, 0]} material={bodyMat}>
-        <sphereGeometry args={[0.22, 16, 12]} />
+      <mesh position={[0, 1.38, 0]} scale={[1, 1.06, 0.96]} material={skinMat}>
+        <sphereGeometry args={[0.22, 24, 18]} />
+      </mesh>
+      {/* Eyes */}
+      <mesh position={[ 0.075, 1.41, 0.19]} material={eyeMat}>
+        <sphereGeometry args={[0.027, 10, 8]} />
+      </mesh>
+      <mesh position={[-0.075, 1.41, 0.19]} material={eyeMat}>
+        <sphereGeometry args={[0.027, 10, 8]} />
+      </mesh>
+      {/* Nose */}
+      <mesh position={[0, 1.33, 0.21]} material={skinMat}>
+        <sphereGeometry args={[0.018, 8, 6]} />
       </mesh>
       {/* Neck */}
-      <mesh position={[0, 1.09, 0]} material={bodyMat}>
-        <cylinderGeometry args={[0.07, 0.08, 0.18, 8]} />
-      </mesh>
-      {/* Shoulder bar */}
-      <mesh position={[0, 0.90, 0]} material={bodyMat}>
-        <boxGeometry args={[0.82, 0.12, 0.20]} />
-      </mesh>
-      {/* Torso */}
-      <mesh position={[0, 0.53, 0]} material={bodyMat}>
-        <boxGeometry args={[0.52, 0.72, 0.22]} />
-      </mesh>
-      {/* Hips */}
-      <mesh position={[0, 0.10, 0]} material={bodyMat}>
-        <boxGeometry args={[0.44, 0.20, 0.20]} />
+      <mesh position={[0, 1.05, 0]} material={skinMat}>
+        <cylinderGeometry args={[0.075, 0.09, 0.22, 12]} />
       </mesh>
 
-      {/* Left arm — static */}
-      <mesh position={[-0.46, 0.71, 0]} rotation={[0, 0, -0.3]} material={bodyMat}>
-        <cylinderGeometry args={[0.07, 0.07, 0.48, 8]} />
+      {/* ── Upper body (shirt) ── */}
+      {/* Chest */}
+      <mesh position={[0, 0.72, 0]} material={shirtMat}>
+        <boxGeometry args={[0.54, 0.46, 0.24]} />
       </mesh>
-      <mesh position={[-0.54, 0.27, 0]} rotation={[0, 0, -0.12]} material={bodyMat}>
-        <cylinderGeometry args={[0.055, 0.055, 0.42, 8]} />
+      {/* Waist */}
+      <mesh position={[0, 0.29, 0]} material={shirtMat}>
+        <boxGeometry args={[0.46, 0.28, 0.22]} />
       </mesh>
-      <mesh position={[-0.57, 0.06, 0]} material={bodyMat}>
-        <sphereGeometry args={[0.07, 8, 8]} />
+      {/* Shoulder caps (smooth the arm–torso joint) */}
+      <mesh position={[ 0.30, 0.90, 0]} material={shirtMat}>
+        <sphereGeometry args={[0.115, 14, 10]} />
+      </mesh>
+      <mesh position={[-0.30, 0.90, 0]} material={shirtMat}>
+        <sphereGeometry args={[0.115, 14, 10]} />
       </mesh>
 
-      {/* Right arm — pivots at shoulder for wave animation */}
-      <group position={[0.41, 0.95, 0]} ref={rightArmRef}>
-        <mesh position={[0, -0.24, 0]} material={bodyMat}>
-          <cylinderGeometry args={[0.07, 0.07, 0.48, 8]} />
+      {/* ── Hips / belt ── */}
+      <mesh position={[0, 0.04, 0]} material={pantsMat}>
+        <boxGeometry args={[0.48, 0.24, 0.23]} />
+      </mesh>
+
+      {/* ── Left arm (at rest) ── */}
+      <mesh position={[-0.38, 0.70, 0]} rotation={[0, 0, -0.22]} material={shirtMat}>
+        <cylinderGeometry args={[0.072, 0.062, 0.44, 10]} />
+      </mesh>
+      <mesh position={[-0.44, 0.30, 0]} rotation={[0, 0, -0.08]} material={skinMat}>
+        <cylinderGeometry args={[0.058, 0.050, 0.38, 10]} />
+      </mesh>
+      <mesh position={[-0.46, 0.10, 0]} material={skinMat}>
+        <sphereGeometry args={[0.060, 12, 8]} />
+      </mesh>
+
+      {/* ── Right arm (waving — hierarchical pivot at shoulder) ── */}
+      <group position={[0.30, 0.90, 0]} ref={rightArmRef}>
+        <mesh position={[0, -0.22, 0]} material={shirtMat}>
+          <cylinderGeometry args={[0.072, 0.062, 0.44, 10]} />
         </mesh>
-        {/* Elbow pivot */}
-        <group position={[0, -0.48, 0]} ref={rightElbowRef}>
-          <mesh position={[0, 0, 0]} material={jointMat}>
-            <sphereGeometry args={[0.04, 8, 8]} />
+        <group position={[0, -0.44, 0]} ref={rightElbowRef}>
+          <mesh position={[0, -0.19, 0]} material={skinMat}>
+            <cylinderGeometry args={[0.058, 0.050, 0.38, 10]} />
           </mesh>
-          <mesh position={[0, -0.21, 0]} material={bodyMat}>
-            <cylinderGeometry args={[0.055, 0.055, 0.42, 8]} />
-          </mesh>
-          {/* Hand */}
-          <mesh position={[0, -0.42, 0]} material={bodyMat}>
-            <sphereGeometry args={[0.07, 8, 8]} />
+          <mesh position={[0, -0.38, 0]} material={skinMat}>
+            <sphereGeometry args={[0.060, 12, 8]} />
           </mesh>
         </group>
       </group>
 
-      {/* Right upper leg */}
-      <mesh position={[0.17, -0.19, 0]} material={bodyMat}>
-        <cylinderGeometry args={[0.10, 0.09, 0.58, 8]} />
+      {/* ── Legs ── */}
+      <mesh position={[ 0.14, -0.22, 0]} material={pantsMat}>
+        <cylinderGeometry args={[0.100, 0.090, 0.56, 10]} />
       </mesh>
-      {/* Left upper leg */}
-      <mesh position={[-0.17, -0.19, 0]} material={bodyMat}>
-        <cylinderGeometry args={[0.10, 0.09, 0.58, 8]} />
+      <mesh position={[-0.14, -0.22, 0]} material={pantsMat}>
+        <cylinderGeometry args={[0.100, 0.090, 0.56, 10]} />
       </mesh>
-      {/* Right lower leg */}
-      <mesh position={[0.17, -0.74, 0]} material={bodyMat}>
-        <cylinderGeometry args={[0.075, 0.065, 0.52, 8]} />
+      <mesh position={[ 0.14, -0.76, 0]} material={pantsMat}>
+        <cylinderGeometry args={[0.085, 0.075, 0.50, 10]} />
       </mesh>
-      {/* Left lower leg */}
-      <mesh position={[-0.17, -0.74, 0]} material={bodyMat}>
-        <cylinderGeometry args={[0.075, 0.065, 0.52, 8]} />
-      </mesh>
-      {/* Right foot */}
-      <mesh position={[0.17, -1.04, 0.07]} material={bodyMat}>
-        <boxGeometry args={[0.12, 0.07, 0.27]} />
-      </mesh>
-      {/* Left foot */}
-      <mesh position={[-0.17, -1.04, 0.07]} material={bodyMat}>
-        <boxGeometry args={[0.12, 0.07, 0.27]} />
+      <mesh position={[-0.14, -0.76, 0]} material={pantsMat}>
+        <cylinderGeometry args={[0.085, 0.075, 0.50, 10]} />
       </mesh>
 
-      {/* Glowing joints */}
-      {staticJoints.map(([x, y, z], i) => (
-        <mesh key={i} position={[x, y, z]} material={jointMat}>
-          <sphereGeometry args={[0.04, 8, 8]} />
-        </mesh>
-      ))}
+      {/* ── Shoes ── */}
+      <mesh position={[ 0.14, -1.04, 0.06]} material={shoesMat}>
+        <boxGeometry args={[0.145, 0.10, 0.31]} />
+      </mesh>
+      <mesh position={[-0.14, -1.04, 0.06]} material={shoesMat}>
+        <boxGeometry args={[0.145, 0.10, 0.31]} />
+      </mesh>
     </group>
   );
 }
@@ -253,9 +253,10 @@ function HeroVisual() {
           camera={{ position: [0, 0.3, 4.5], fov: 44 }}
           style={{ width: "100%", height: "100%" }}
         >
-          <ambientLight intensity={0.5} />
-          <pointLight position={[2, 4, 2]} intensity={1.2} />
-          <pointLight position={[-1, 2, 3]} intensity={0.4} color="#e7e5e4" />
+          <ambientLight intensity={0.35} />
+          <directionalLight position={[2, 5, 3]} intensity={1.6} />
+          <directionalLight position={[-2, 2, 1]} intensity={0.5} color="#9bb8d4" />
+          <pointLight position={[0, 1, 4]} intensity={0.6} color="#fff5e4" />
           <HumanFigure />
         </Canvas>
 
