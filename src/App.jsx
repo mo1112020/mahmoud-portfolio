@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import ReactDOM from "react-dom";
-import { Canvas, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import charImg from "./assets/character.png";
 import cvPdf from "./assets/MAHMOUD_AHMED_CV_ATS.pdf";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/eng-mahmoud-saad-635185249/";
@@ -37,126 +36,6 @@ const Icons = {
   Youtube: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.11 1 12 1 12s0 3.89.46 5.58a2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.89 23 12 23 12s0-3.89-.46-5.58z" /><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" /></svg>,
   ArrowDown: () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>,
 };
-
-// ─── Three.js Human Figure ────────────────────────────────────────────────────
-
-function HumanFigure() {
-  const rightArmRef   = useRef();
-  const rightElbowRef = useRef();
-
-  const skinMat  = useMemo(() => new THREE.MeshStandardMaterial({ color: "#D4956A", roughness: 0.75, metalness: 0.0 }), []);
-  const hairMat  = useMemo(() => new THREE.MeshStandardMaterial({ color: "#1A0E08", roughness: 1.0 }), []);
-  const shirtMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#2D5DA6", roughness: 0.85 }), []);
-  const pantsMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#1E2B3C", roughness: 0.9 }), []);
-  const shoesMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0D0D0D", roughness: 0.65 }), []);
-  const eyeMat   = useMemo(() => new THREE.MeshStandardMaterial({ color: "#080808", roughness: 0.2, metalness: 0.4 }), []);
-
-  useFrame(({ clock }) => {
-    if (rightArmRef.current)
-      rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, 2.05, 0.04);
-    if (rightElbowRef.current)
-      rightElbowRef.current.rotation.z = Math.sin(clock.elapsedTime * 3) * 0.5;
-  });
-
-  return (
-    <group>
-      {/* ── Head ── */}
-      {/* Hair cap (top hemisphere, slightly larger than head) */}
-      <mesh position={[0, 1.50, -0.01]} material={hairMat}>
-        <sphereGeometry args={[0.235, 20, 10, 0, Math.PI * 2, 0, Math.PI * 0.52]} />
-      </mesh>
-      {/* Head */}
-      <mesh position={[0, 1.38, 0]} scale={[1, 1.06, 0.96]} material={skinMat}>
-        <sphereGeometry args={[0.22, 24, 18]} />
-      </mesh>
-      {/* Eyes */}
-      <mesh position={[ 0.075, 1.41, 0.19]} material={eyeMat}>
-        <sphereGeometry args={[0.027, 10, 8]} />
-      </mesh>
-      <mesh position={[-0.075, 1.41, 0.19]} material={eyeMat}>
-        <sphereGeometry args={[0.027, 10, 8]} />
-      </mesh>
-      {/* Nose */}
-      <mesh position={[0, 1.33, 0.21]} material={skinMat}>
-        <sphereGeometry args={[0.018, 8, 6]} />
-      </mesh>
-      {/* Neck */}
-      <mesh position={[0, 1.05, 0]} material={skinMat}>
-        <cylinderGeometry args={[0.075, 0.09, 0.22, 12]} />
-      </mesh>
-
-      {/* ── Upper body (shirt) ── */}
-      {/* Chest */}
-      <mesh position={[0, 0.72, 0]} material={shirtMat}>
-        <boxGeometry args={[0.54, 0.46, 0.24]} />
-      </mesh>
-      {/* Waist */}
-      <mesh position={[0, 0.29, 0]} material={shirtMat}>
-        <boxGeometry args={[0.46, 0.28, 0.22]} />
-      </mesh>
-      {/* Shoulder caps (smooth the arm–torso joint) */}
-      <mesh position={[ 0.30, 0.90, 0]} material={shirtMat}>
-        <sphereGeometry args={[0.115, 14, 10]} />
-      </mesh>
-      <mesh position={[-0.30, 0.90, 0]} material={shirtMat}>
-        <sphereGeometry args={[0.115, 14, 10]} />
-      </mesh>
-
-      {/* ── Hips / belt ── */}
-      <mesh position={[0, 0.04, 0]} material={pantsMat}>
-        <boxGeometry args={[0.48, 0.24, 0.23]} />
-      </mesh>
-
-      {/* ── Left arm (at rest) ── */}
-      <mesh position={[-0.38, 0.70, 0]} rotation={[0, 0, -0.22]} material={shirtMat}>
-        <cylinderGeometry args={[0.072, 0.062, 0.44, 10]} />
-      </mesh>
-      <mesh position={[-0.44, 0.30, 0]} rotation={[0, 0, -0.08]} material={skinMat}>
-        <cylinderGeometry args={[0.058, 0.050, 0.38, 10]} />
-      </mesh>
-      <mesh position={[-0.46, 0.10, 0]} material={skinMat}>
-        <sphereGeometry args={[0.060, 12, 8]} />
-      </mesh>
-
-      {/* ── Right arm (waving — hierarchical pivot at shoulder) ── */}
-      <group position={[0.30, 0.90, 0]} ref={rightArmRef}>
-        <mesh position={[0, -0.22, 0]} material={shirtMat}>
-          <cylinderGeometry args={[0.072, 0.062, 0.44, 10]} />
-        </mesh>
-        <group position={[0, -0.44, 0]} ref={rightElbowRef}>
-          <mesh position={[0, -0.19, 0]} material={skinMat}>
-            <cylinderGeometry args={[0.058, 0.050, 0.38, 10]} />
-          </mesh>
-          <mesh position={[0, -0.38, 0]} material={skinMat}>
-            <sphereGeometry args={[0.060, 12, 8]} />
-          </mesh>
-        </group>
-      </group>
-
-      {/* ── Legs ── */}
-      <mesh position={[ 0.14, -0.22, 0]} material={pantsMat}>
-        <cylinderGeometry args={[0.100, 0.090, 0.56, 10]} />
-      </mesh>
-      <mesh position={[-0.14, -0.22, 0]} material={pantsMat}>
-        <cylinderGeometry args={[0.100, 0.090, 0.56, 10]} />
-      </mesh>
-      <mesh position={[ 0.14, -0.76, 0]} material={pantsMat}>
-        <cylinderGeometry args={[0.085, 0.075, 0.50, 10]} />
-      </mesh>
-      <mesh position={[-0.14, -0.76, 0]} material={pantsMat}>
-        <cylinderGeometry args={[0.085, 0.075, 0.50, 10]} />
-      </mesh>
-
-      {/* ── Shoes ── */}
-      <mesh position={[ 0.14, -1.04, 0.06]} material={shoesMat}>
-        <boxGeometry args={[0.145, 0.10, 0.31]} />
-      </mesh>
-      <mesh position={[-0.14, -1.04, 0.06]} material={shoesMat}>
-        <boxGeometry args={[0.145, 0.10, 0.31]} />
-      </mesh>
-    </group>
-  );
-}
 
 // ─── Shared Components ────────────────────────────────────────────────────────
 
@@ -216,8 +95,36 @@ function SkillsMarquee() {
 }
 
 function HeroVisual() {
+  const [msgIdx, setMsgIdx] = useState(0);
+  const [isTalking, setIsTalking] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const frameRef = useRef(null);
+
+  const msgs = [
+    "Welcome to my portfolio!",
+    "How can I help you today?",
+    "Need an engineering tutor?",
+    "Building things is my passion!",
+    "Let's create something great!",
+    "Check out my YouTube channel!",
+    "Success starts with a plan.",
+    "Calculus 1 & 2 are my specialty!",
+    "Solving problems, one at a time.",
+    "Ready for our next project?",
+    "Innovation in every design.",
+    "Welcome! Click me for more!",
+  ];
+
+  const nextMsg = useCallback(() => {
+    setMsgIdx((i) => (i + 1) % msgs.length);
+    setIsTalking(true);
+    setTimeout(() => setIsTalking(false), 2000);
+  }, [msgs.length]);
+
+  useEffect(() => {
+    const t = setInterval(nextMsg, 8000);
+    return () => clearInterval(t);
+  }, [nextMsg]);
 
   const handleMouseMove = useCallback((e) => {
     const el = frameRef.current;
@@ -247,18 +154,18 @@ function HeroVisual() {
           transition: "transform 0.1s ease-out",
         }}
       >
-        <Canvas
-          className="bp-canvas"
-          gl={{ alpha: true }}
-          camera={{ position: [0, 0.3, 4.5], fov: 44 }}
-          style={{ width: "100%", height: "100%" }}
+        <div
+          className={`char-wrap ${isTalking ? "is-talking" : ""}`}
+          onClick={nextMsg}
+          style={{ cursor: "pointer" }}
         >
-          <ambientLight intensity={0.35} />
-          <directionalLight position={[2, 5, 3]} intensity={1.6} />
-          <directionalLight position={[-2, 2, 1]} intensity={0.5} color="#9bb8d4" />
-          <pointLight position={[0, 1, 4]} intensity={0.6} color="#fff5e4" />
-          <HumanFigure />
-        </Canvas>
+          <div className="char-circle">
+            <div className="char-glow" />
+            <img src={charImg} alt="Welcome" className="hero-char" />
+            <div className="mouth-anim" />
+          </div>
+          <div className="welcome-bubble">{msgs[msgIdx]}</div>
+        </div>
 
         <div className="float-tag ft-tl">AutoCAD</div>
         <div className="float-tag ft-tr">SAP2000</div>
