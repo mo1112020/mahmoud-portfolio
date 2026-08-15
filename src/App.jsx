@@ -491,9 +491,16 @@ function SkillsPage() {
         <div className="edu-lang-grid">
           <div className="card edu-card">
             <p className="eyebrow"><span className="eyebrow-line" />Education</p>
-            <h3 className="edu-degree">B.Sc. Civil Engineering</h3>
-            <p className="edu-school">Istanbul Nişantaşı University</p>
-            <p className="edu-date">Sep 2021 – Jul 2025</p>
+            <div className="edu-entry">
+              <h3 className="edu-degree">M.Sc. Civil Engineering</h3>
+              <p className="edu-school">İstanbul Gelişim Üniversitesi</p>
+              <p className="edu-date">Sep 2026 – Present</p>
+            </div>
+            <div className="edu-entry">
+              <h3 className="edu-degree">B.Sc. Civil Engineering</h3>
+              <p className="edu-school">Istanbul Nişantaşı University</p>
+              <p className="edu-date">Sep 2021 – Jul 2025</p>
+            </div>
           </div>
           <div className="card lang-card">
             <p className="eyebrow"><span className="eyebrow-line" />Languages</p>
@@ -1265,7 +1272,9 @@ const css = (T) => `
   .edu-lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; align-items: stretch; }
   .edu-card, .lang-card { padding: 32px; display: flex; flex-direction: column; height: 100%; }
   .lang-card .lang-list { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .edu-entry + .edu-entry { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); }
   .edu-degree { font-size: 18px; font-weight: 700; color: var(--white); margin-top: 16px; font-family: var(--display); }
+  .edu-entry + .edu-entry .edu-degree { margin-top: 0; }
   .edu-school { font-size: 14px; color: var(--muted); margin-top: 6px; }
   .edu-date   { font-size: 12px; color: var(--dim); margin-top: 8px; font-weight: 500; }
 
